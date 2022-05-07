@@ -1,28 +1,24 @@
 package ru.llm.pivoadm.utils;
 
-import com.google.inject.Singleton;
-
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public final class ConnectionManager {
+public final class ConnectionUtil {
     private static final String PASSWORD_KEY = "db.password";
 
     private static final String USERNAME_KEY = "db.username";
 
     private static final String URL_KEY = "db.url";
 
+    private Connection connection;
 
-    static {
+    public ConnectionUtil() {
         loadDriver();
     }
 
-    private ConnectionManager() {
-
-    }
-
-    public static Connection open() {
+    public  Connection getConnection() {
         try {
             return DriverManager.getConnection(
                     PropertiesUtil.get(URL_KEY),
@@ -34,7 +30,14 @@ public final class ConnectionManager {
         }
     }
 
-    private static void loadDriver() {
+    public DatabaseMetaData getDataBaseMetaData() throws SQLException {
+        if (connection == null) {
+            connection = getConnection();
+        }
+        return connection.getMetaData();
+    }
+
+    private  void loadDriver() {
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {

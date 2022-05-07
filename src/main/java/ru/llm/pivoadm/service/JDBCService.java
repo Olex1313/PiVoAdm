@@ -1,20 +1,13 @@
 package ru.llm.pivoadm.service;
 
-import ru.llm.pivoadm.utils.ConnectionManager;
-
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
+import com.google.inject.Inject;
+import ru.llm.pivoadm.utils.ConnectionUtil;
 
 public class JDBCService {
-    private final Connection connection = ConnectionManager.open();
+    public ConnectionUtil connectionUtil;
 
-    public DatabaseMetaData getMetaData() throws SQLException {
-        return connection.getMetaData();
-    }
-
-    public Statement getStatement() throws SQLException {
-        return connection.createStatement();
+    @Inject
+    public JDBCService(ConnectionUtil connectionUtil) {
+        this.connectionUtil = connectionUtil;
     }
 }
