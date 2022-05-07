@@ -18,7 +18,7 @@ public class JDBCModule extends AbstractModule {
     }
 
     @Provides
-    JDBCService provideJDBCModule(ConnectionUtil connectionUtil) {
+    JDBCService provideJDBCService(ConnectionUtil connectionUtil) {
         return new JDBCService(connectionUtil);
     }
 
