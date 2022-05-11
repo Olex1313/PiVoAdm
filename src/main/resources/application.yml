@@ -3,8 +3,7 @@ spring:
       driver-class-name: org.postgresql.Driver
       username: PivoCore
       password: password
-      url: jdbc:postgresql://localhost:5432/PivoCore
-      url: jdbc:postgresql://localhost:5432/PivoCoreb
+      url: jdbc:postgresql://localhost:5432/PivoCoreDb
   liquibase:
     change-log: classpath:liquibase/database-changelog.xml
   banner:
