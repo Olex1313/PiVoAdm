@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+      https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="create_restaurant_user_id_seq" author="vladislavmoiseenkov" dbms="postgresql" created="11.05.2022">
+        <createSequence incrementBy="25" sequenceName="restaurant_user_id_generator" startValue="1"/>
+    </changeSet>
+
+    <changeSet id="restaurant_user_table" author="vladislavmoiseenkov1" dbms="postgresql" created="11.05.2022">
+        <createTable tableName="restaurant_users">
+            <column name="restaurant_user_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="restaurant_users_pk"/>
+            </column>
+            <column name="first_name" type="VARCHAR(255)"/>
+            <column name="last_name" type="VARCHAR(255)"/>
+            <column name="middle_name" type="VARCHAR(255)"/>
+            <column name="username" type="VARCHAR(255)"/>
+            <column name="phone_number" type="CHAR(10)"/>
+            <column name="password_hash" type="CHAR(64)"/>
+            <column name="email" type="VARCHAR(255)"/>
+            <column name="is_active" type="BOOLEAN"/>
+
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
