@@ -55,7 +55,6 @@ public class RestaurantUserDto implements UserDetails {
         return username;
     }
 
-    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return enabled;
