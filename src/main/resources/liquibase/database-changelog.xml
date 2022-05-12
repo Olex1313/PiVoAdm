@@ -4,10 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
       https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
-
-    <include file="liquibase/1.0.0/create-restaurant-users-table.xml"/>
     <include file="liquibase/1.0.0/create-app-user-table.xml"/>
-    <include file="liquibase/1.0.0/create-restaurant-table.xml"/>
-    <include file="liquibase/1.0.0/link-restaurants-to-restaurants-users.xml"/>
-
-</databaseChangeLog>
+    <include file="liquibase/1.0.0/create-restaurant-users-table.xml"/>
+    <include file="liquibase/1.0.0/create-reservations-table.xml"/>
+</databaseChangeLog> 
