@@ -11,6 +11,13 @@ import ru.llm.pivocore.model.dto.ReservationResponseDto;
 import ru.llm.pivocore.model.entity.RestaurantEntity;
 import ru.llm.pivocore.model.entity.RestaurantUserEntity;
 import ru.llm.pivocore.model.request.ReservationRequest;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+import ru.llm.pivocore.configuration.security.facade.IAuthenticationFacade;
+import ru.llm.pivocore.mapper.AppUserMapper;
+import ru.llm.pivocore.mapper.ReservationMapper;
+import ru.llm.pivocore.model.ReservationRequest;
+import ru.llm.pivocore.model.dto.AppUserDto;
 import ru.llm.pivocore.model.dto.ReservationDto;
 import ru.llm.pivocore.model.entity.AppUserEntity;
 import ru.llm.pivocore.model.entity.ReservationEntity;
@@ -21,6 +28,8 @@ import ru.llm.pivocore.repository.RestaurantRepository;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+
+import java.time.LocalDate;
 
 @Service
 @AllArgsConstructor
