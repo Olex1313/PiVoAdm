@@ -40,10 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         var authenticationFilter = new PiVoCoreAuthenticationFilter(authenticationManagerBean(), secretsConfig.getJwtSecret());
         var authorizationFilter = new PiVoJwtAuthorizationFilter(secretsConfig.getJwtSecret());
         authenticationFilter.setFilterProcessesUrl("/api/app_user/login");
-        authenticationFilter.setFilterProcessesUrl("/api/restaurant_user/login");
         http = http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
-        http.authorizeRequests().antMatchers(GET, "/api/restaurant_user/**").hasAuthority(RESTAURANT_USER.name());
         http.authorizeRequests().antMatchers(GET, "/api/app_user/**").hasAuthority(APP_USER.name());
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(authenticationFilter);
