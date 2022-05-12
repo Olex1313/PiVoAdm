@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+      https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="create_reservations_id_seq" author="vladislavmoiseenkov" dbms="postgresql" created="12.05.2022">
+        <createSequence incrementBy="25" sequenceName="reservations_id_generator" startValue="1"/>
+    </changeSet>
+
+    <changeSet id="create_reservations_table" author="vladislavmoiseenkov" dbms="postgresql" created="12.05.2022">
+        <createTable tableName="reservations">
+            <column name="reservation_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="reservations_pk"/>
+            </column>
+            <column name="app_user_id" type="BIGINT"/>
+            <column name="restaurant_id" type="BIGINT" />
+            <column name="table_id" type="BIGINT"/>
+            <column name="time" type="TIMESTAMP"/>
+            <column name="deposit" type="INTEGER" defaultValue="1"/>
+            <column name="amount_of_guests" type="INTEGER"/>
+            <column name="approved_by" type="INTEGER"/>
+            <column name="approve_time" type="TIMESTAMP"/>
+        </createTable>
+
+
+        <addForeignKeyConstraint baseTableName="reservations" baseColumnNames="restaurant_id"
+                                 constraintName="reservations_app_users_fk" referencedTableName="app_users"
+                                 referencedColumnNames="app_user_id"/>
+
+    </changeSet>
+
+</databaseChangeLog>

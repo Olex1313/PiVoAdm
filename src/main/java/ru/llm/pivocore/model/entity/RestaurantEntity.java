@@ -67,7 +67,9 @@ public class RestaurantEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RestaurantEntity that = (RestaurantEntity) o;
-        return id.equals(that.id) && name.equals(that.name) && location.equals(that.location) && website.equals(that.website) && phoneNumber.equals(that.phoneNumber) && email.equals(that.email) && isActive.equals(that.isActive);
+        return id.equals(that.id) && name.equals(that.name) && location.equals(that.location)
+                && website.equals(that.website) && phoneNumber.equals(that.phoneNumber)
+                && email.equals(that.email) && isActive.equals(that.isActive);
     }
 
     @Override
