@@ -112,7 +112,7 @@ CREATE TABLE Reservations (
     app_user_id INTEGER NOT NULL,
     restaurant_id INTEGER NOT NULL,
     table_id INTEGER,
-    time TIMESTAMP NOT NULL,
+    reservation_time TIMESTAMP NOT NULL,
     deposit INTEGER DEFAULT 0,
     amount_of_guests INTEGER DEFAULT 1,
     approved_by INTEGER,
