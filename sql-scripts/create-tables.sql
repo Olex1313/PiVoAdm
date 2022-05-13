@@ -11,6 +11,7 @@ CREATE TABLE AppUsers (
 
     CONSTRAINT app_users_pk PRIMARY KEY (app_user_id),
 
+    CONSTRAINT app_user_username_check CHECK (app_user_id ~ '^w{3,}$'),
     CONSTRAINT app_user_email_check CHECK (email ~ '^\w+@(\w+\.\w+)+$'),
     CONSTRAINT app_user_phone_number_check CHECK (phone_number ~ '^[0-9]{10}$'),
     CONSTRAINT app_user_date_of_birthday_check CHECK (date_of_birthday < now()),
@@ -55,15 +56,15 @@ CREATE TABLE RestaurantUsers (
     first_name VARCHAR NOT NULL,
     last_name VARCHAR NOT NULL,
     middle_name VARCHAR DEFAULT '',
-    restaurant_id INTEGER NOT NULL,
-    phone_number CHAR(10),
+    phone_number CHAR(10) NOT NULL,
+    username VARCHAR NOT NULL,
     password_hash CHAR(64) NOT NULL,
     email VARCHAR NOT NULL,
     is_active BOOLEAN DEFAULT True NOT NULL,
 
     CONSTRAINT restaurant_users_pk PRIMARY KEY (restaurant_user_id),
-    CONSTRAINT restaurant_users_restaurants_fk FOREIGN KEY (restaurant_id) REFERENCES Restaurants(restaurant_id),
 
+    CONSTRAINT restaurant_users_username_check CHECK (restaurant_user_id ~ '^w{3,}$'),
     CONSTRAINT restaurant_users_email_check CHECK (email ~ '^\w+@(\w+\.\w+)+$'),
     CONSTRAINT restaurant_users_phone_number_check CHECK (phone_number ~ '^[0-9]{10}$'),
     CONSTRAINT restaurant_users_full_name_check CHECK (
@@ -82,6 +83,14 @@ CREATE TABLE RestaurantUsers (
 
     CONSTRAINT restaurant_users_unique_email UNIQUE (email),
     CONSTRAINT restaurant_users_unique_phone_number UNIQUE (phone_number)
+);
+
+CREATE TABLE RestaurantUsersToRestaurants (
+    restaurant_user_id INTEGER NOT NULL,
+    restaurant_id INTEGER NOT NULL,
+
+    CONSTRAINT restaurant_user_fk FOREIGN KEY (restaurant_user_id) REFERENCES RestaurantUsers(restaurant_user_id),
+    CONSTRAINT restaurant_fk FOREIGN KEY (restaurant_id) REFERENCES Restaurants(restaurant_id)
 );
 
 CREATE TABLE RestaurantTables (
