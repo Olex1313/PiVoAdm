@@ -3,6 +3,7 @@ CREATE TABLE AppUsers (
     first_name VARCHAR NOT NULL,
     last_name VARCHAR NOT NULL,
     middle_name VARCHAR DEFAULT '',
+    username VARCHAR NOT NULL,
     email VARCHAR NOT NULL,
     password_hash VARCHAR(256) NOT NULL,
     phone_number CHAR(10) NOT NULL,
@@ -29,7 +30,8 @@ CREATE TABLE AppUsers (
         )
     ),
     CONSTRAINT app_user_unique_email UNIQUE (email),
-    CONSTRAINT app_user_unique_phone_number UNIQUE (phone_number)
+    CONSTRAINT app_user_unique_phone_number UNIQUE (phone_number),
+    CONSTRAINT app_users_unique_username UNIQUE (username)
 );
 
 CREATE TABLE Restaurants (
@@ -83,6 +85,7 @@ CREATE TABLE RestaurantUsers (
 
     CONSTRAINT restaurant_users_unique_email UNIQUE (email),
     CONSTRAINT restaurant_users_unique_phone_number UNIQUE (phone_number)
+    CONSTRAINT restaurant_users_unique_username UNIQUE (username)
 );
 
 CREATE TABLE RestaurantUsersToRestaurants (
