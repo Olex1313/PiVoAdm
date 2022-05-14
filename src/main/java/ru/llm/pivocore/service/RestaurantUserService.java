@@ -1,7 +1,9 @@
 package ru.llm.pivocore.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -36,6 +38,18 @@ public class RestaurantUserService implements UserDetailsService {
     public RestaurantUserEntity save(RestaurantUserEntity restaurantUserEntity) {
         restaurantUserEntity.setPasswordHash(passwordEncoder.encode(restaurantUserEntity.getPasswordHash()));
         return restaurantUsersRepository.save(restaurantUserEntity);
+    }
+
+    @Transactional
+    public RestaurantUserEntity getCurrentUserFromSecContext() {
+        val currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        try {
+            return restaurantUsersRepository.findByUsername(currentUsername);
+        } catch (Exception e) {
+            throw new RestaurantUserServiceException(
+                    "Couldn't retrieve restaurant user for current user:%s in session".formatted(currentUsername)
+            );
+        }
     }
 
     public List<RestaurantUserDto> getAll() {

@@ -14,11 +14,17 @@
             <column name="restaurant_id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="restaurants_pk"/>
             </column>
-            <column name="name" type="TEXT"/>
-            <column name="location" type="TEXT"/>
+            <column name="name" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="location" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
             <column name="website" type="TEXT"/>
             <column name="phone_number" type="CHAR(10)"/>
-            <column name="email" type="TEXT"/>
+            <column name="email" type="TEXT">
+                <constraints nullable="true"/>
+            </column>
             <column name="is_active" type="BOOLEAN" defaultValueBoolean="true"/>
         </createTable>
     </changeSet>

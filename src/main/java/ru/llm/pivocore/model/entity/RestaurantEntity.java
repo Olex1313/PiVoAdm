@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -14,6 +16,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Table(name = "restaurants")
 public class RestaurantEntity {
+
     @Id
     @Column(name="restaurant_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "restaurant_id_generator")
@@ -37,6 +40,14 @@ public class RestaurantEntity {
 
     @Column(name="is_active")
     private Boolean isActive;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "restaurants_restaurant_users",
+            joinColumns = { @JoinColumn(name = "restaurant_id") },
+            inverseJoinColumns = { @JoinColumn(name = "restaurant_user_id") }
+    )
+    private List<RestaurantUserEntity> restaurantUsers;
 
     @Override
     public String toString() {
@@ -70,4 +81,5 @@ public class RestaurantEntity {
         result = 31 * result + (isActive != null ? isActive.hashCode() : 0);
         return result;
     }
+
 }
