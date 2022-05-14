@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.time.LocalDate;
 
 @Getter
@@ -12,8 +13,9 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class ReservationDto {
-    private LocalDate time;
+    private Long restaurantId;
+    private Instant startReservationTime;
+    private Instant endReservationTime;
     private Integer deposit;
     private Integer amountOfGuests;
-
 }

@@ -5,11 +5,14 @@ public class RestaurantUserServiceException extends RuntimeException{
         super();
     }
 
+
+    public RestaurantUserServiceException(String message) {
+        super(message);
+    }
+
     public RestaurantUserServiceException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public RestaurantUserServiceException(String formatted) {
 
-    }
 }

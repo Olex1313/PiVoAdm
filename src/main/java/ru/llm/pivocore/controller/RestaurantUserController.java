@@ -4,8 +4,12 @@ package ru.llm.pivocore.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
+import ru.llm.pivocore.model.dto.ReservationDto;
+import ru.llm.pivocore.model.dto.ReservationResponseDto;
 import ru.llm.pivocore.model.request.RestaurantUserRegisterRequest;
 import ru.llm.pivocore.model.dto.RestaurantUserDto;
+import ru.llm.pivocore.service.ReservationService;
+import ru.llm.pivocore.service.RestaurantService;
 import ru.llm.pivocore.service.RestaurantUserService;
 
 import java.util.List;
@@ -16,6 +20,7 @@ import java.util.List;
 public class RestaurantUserController {
 
     private final RestaurantUserService restaurantUserService;
+    private final RestaurantService restaurantService;
 
     @GetMapping(value = "/")
     public @ResponseBody List<RestaurantUserDto> getAllRestaurantUsers() {
@@ -29,4 +34,13 @@ public class RestaurantUserController {
         return restaurantUserService.register(registerRequest);
     }
 
+    @GetMapping(value = "/reservations")
+    public @ResponseBody List<ReservationDto> getAllCurrentReservations(@RequestParam Integer restaurantId) {
+        return restaurantService.getAllReservations(restaurantId);
+    }
+
+    @PostMapping(value = "/approve")
+    public @ResponseBody ReservationResponseDto submitReservation(@RequestParam Long reservationId) {
+        return restaurantService.approveById(reservationId);
+    }
 }

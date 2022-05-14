@@ -17,23 +17,23 @@ public class RestaurantController {
 
     private final RestaurantService restaurantService;
 
-    @PostMapping(value = "/")
-    private @ResponseBody RestaurantDto createRestaurant(
-            @RequestBody CreateRestaurantRequest request
-    ) {
-        return restaurantService.createRestaurant(request);
-    }
+//    @PostMapping(value = "/")
+//    private @ResponseBody RestaurantDto createRestaurant(
+//            @RequestBody CreateRestaurantRequest request
+//    ) {
+//        return restaurantService.createRestaurant(request);
+//    }
 
-    @GetMapping(value = "/")
-    private @ResponseBody List<RestaurantDto> listRestaurants() {
-        return restaurantService.listRestaurants();
-    }
+//    @GetMapping(value = "/")
+//    private @ResponseBody List<RestaurantDto> listRestaurants() {
+//        return restaurantService.listRestaurants();
+//    }
 
-    @PatchMapping(value = "/")
-    private @ResponseBody RestaurantDto updateRestaurant(
-            @RequestBody UpdateRestaurantRequest request
-    ) {
-        return restaurantService.updateRestaurant(request);
-    }
+//    @PatchMapping(value = "/")
+//    private @ResponseBody RestaurantDto updateRestaurant(
+//            @RequestBody UpdateRestaurantRequest request
+//    ) {
+//        return restaurantService.updateRestaurant(request);
+//    }
 
 }

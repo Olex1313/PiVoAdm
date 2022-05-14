@@ -1,16 +1,16 @@
 spring:
   datasource:
       driver-class-name: org.postgresql.Driver
-      username: PiVoCore
+      username: pivocore
       password: password
-      url: jdbc:postgresql://localhost:5432/PiVoCoreDb
+      url: jdbc:postgresql://localhost:5432/pivocoredb
   liquibase:
     change-log: classpath:liquibase/database-changelog.xml
   banner:
     location: classpath:banner.txt
 
 server:
-  port: 8081
+  port: 8080
 
 jwt:
   secret: super-secret
