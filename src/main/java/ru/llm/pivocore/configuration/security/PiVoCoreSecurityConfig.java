@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -28,16 +29,20 @@ class PiVoCoreSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        var appUserFilter = new PiVoCoreAuthenticationFilter(piVoCoreAuthenticationManager, secretsConfig.getJwtSecret());
+        var authenticationFilter = new PiVoCoreAuthenticationFilter(piVoCoreAuthenticationManager, secretsConfig.getJwtSecret());
         var authorizationFilter = new PiVoJwtAuthorizationFilter(secretsConfig.getJwtSecret());
-        appUserFilter.setRequiresAuthenticationRequestMatcher(request -> request.getServletPath().endsWith("login"));
+        authenticationFilter.setRequiresAuthenticationRequestMatcher(request -> request.getServletPath().endsWith("login"));
         http = http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
-        http.authorizeRequests().antMatchers("/api/restaurant_user/**").hasAuthority(RESTAURANT_USER.name());
-        http.authorizeRequests().antMatchers(GET, "/api/app_user/**").hasAuthority(APP_USER.name());
-        http.authorizeRequests().requestMatchers(request -> request.getServletPath().endsWith("/register")).permitAll();
-        http.addFilter(appUserFilter);
+        http.authorizeRequests().antMatchers("/api/restaurant_user/**", "/api/restaurant/**").hasAuthority(RESTAURANT_USER.name());
+        http.authorizeRequests().antMatchers("/api/app_user/**").hasAuthority(APP_USER.name());
+        http.addFilter(authenticationFilter);
         http.addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Override
+    public void configure(WebSecurity web) {
+        web.ignoring().antMatchers("/api/restaurant_user/register", "/api/app_user/register");
     }
 
 }

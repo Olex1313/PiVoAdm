@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -45,6 +46,14 @@ public class RestaurantUserEntity {
 
     @Column(name="is_active")
     private Boolean isActive;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "restaurants_restaurant_users",
+            joinColumns = { @JoinColumn(name = "restaurant_user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "restaurant_id") }
+    )
+    private List<RestaurantEntity> restaurantList;
 
     @Override
     public String toString() {
