@@ -1,9 +1,15 @@
 package ru.llm.pivocore.service;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.val;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.llm.pivocore.exception.RestaurantUserServiceException;
+import ru.llm.pivocore.mapper.ReservationMapper;
+import ru.llm.pivocore.model.dto.ReservationDto;
+import ru.llm.pivocore.model.dto.ReservationResponseDto;
+import ru.llm.pivocore.model.entity.ReservationEntity;
 import ru.llm.pivocore.exception.RestaurantCreateException;
 import ru.llm.pivocore.exception.RestaurantException;
 import ru.llm.pivocore.exception.RestaurantNotFoundException;
@@ -12,53 +18,49 @@ import ru.llm.pivocore.mapper.RestaurantMapper;
 import ru.llm.pivocore.model.dto.RestaurantDto;
 import ru.llm.pivocore.model.entity.RestaurantEntity;
 import ru.llm.pivocore.model.entity.RestaurantUserEntity;
-import ru.llm.pivocore.model.request.CreateRestaurantRequest;
-import ru.llm.pivocore.model.request.UpdateRestaurantRequest;
-import ru.llm.pivocore.repository.RestaurantRepository;
+import ru.llm.pivocore.repository.ReservationsRepository;
+import ru.llm.pivocore.repository.RestaurantUsersRepository;
 
-import java.util.ArrayList;
+
+import java.time.Instant;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class RestaurantService {
 
-    private final RestaurantRepository repository;
-
-    private final RestaurantUserService userService;
-
-    private final RestaurantMapper mapper;
+    private final RestaurantUsersRepository restaurantUsersRepository;
+    private final ReservationsRepository reservationsRepository;
+    private final ReservationMapper reservationMapper;
 
     @Transactional
-    public RestaurantDto createRestaurant(CreateRestaurantRequest request) {
-        try {
-            val restaurantUser = userService.getCurrentUserFromSecContext();
-            val rawDto = RestaurantDto.builder()
-                    .email(request.getEmail())
-                    .location(request.getLocation())
-                    .name(request.getName())
-                    .phoneNumber(request.getPhoneNumber())
-                    .website(request.getWebsite())
-                    .isActive(true)
-                    .build();
-            val restaurantEntity = mapper.dtoToEntity(rawDto);
-            linkRestaurantUserToRestaurant(restaurantUser, restaurantEntity);
-            repository.save(restaurantEntity);
-            return rawDto;
-        } catch (Exception e) {
-            throw new RestaurantCreateException(e.getMessage(), e.getCause());
-        }
+    public List<ReservationDto> getAllReservations(Integer restaurantId) {
+        RestaurantUserEntity restaurantUserEntity = getCurrentUserFromSecContext();
+        RestaurantEntity restaurant = restaurantUserEntity.getRestaurantList().get(restaurantId);
+        return restaurant.getReservationEntities().stream().map(reservationMapper::entityToDto).toList();
+    }
+
+    public ReservationResponseDto approveById(Long reservationId) {
+        RestaurantUserEntity restaurantUserEntity = getCurrentUserFromSecContext();
+        ReservationEntity reservationEntity = reservationsRepository.getById(reservationId);
+        // check tables
+        reservationEntity.setRestaurantUser(restaurantUserEntity);
+        reservationEntity.setApprove_time(Instant.now());
+        return new ReservationResponseDto(
+                reservationId,
+                true
+        );
     }
 
     @Transactional
-    public List<RestaurantDto> listRestaurants() {
+    public RestaurantUserEntity getCurrentUserFromSecContext() {
+        val currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         try {
-            val restaurantUser = userService.getCurrentUserFromSecContext();
-            val restaurants = restaurantUser.getRestaurantList();
-            return restaurants.stream().map(mapper::entityToDto).collect(Collectors.toList());
+            return restaurantUsersRepository.findByUsername(currentUsername);
         } catch (Exception e) {
-            throw new RestaurantException(e.getMessage(), e.getCause());
+            throw new RestaurantUserServiceException(
+                    "Couldn't retrieve restaurant user for current user:%s in session".formatted(currentUsername)
+            );
         }
     }
 

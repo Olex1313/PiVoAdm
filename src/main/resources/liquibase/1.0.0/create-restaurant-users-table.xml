@@ -5,11 +5,11 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
       https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
 
-    <changeSet id="create_restaurant_user_id_seq" author="vladislavmoiseenkov" dbms="postgresql" created="11.05.2022">
+    <changeSet id="create_restaurant_user_id_seq" author="vladislavmoiseenkov2" dbms="postgresql" created="11.05.2022">
         <createSequence incrementBy="25" sequenceName="restaurant_user_id_generator" startValue="1"/>
     </changeSet>
 
-    <changeSet id="restaurant_user_table" author="vladislavmoiseenkov1" dbms="postgresql" created="11.05.2022">
+    <changeSet id="restaurant_user_table" author="vladislavmoiseenkov2" dbms="postgresql" created="11.05.2022">
         <createTable tableName="restaurant_users">
             <column name="restaurant_user_id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="restaurant_users_pk"/>

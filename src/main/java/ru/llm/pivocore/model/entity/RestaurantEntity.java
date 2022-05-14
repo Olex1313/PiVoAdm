@@ -48,7 +48,8 @@ public class RestaurantEntity {
             inverseJoinColumns = { @JoinColumn(name = "restaurant_user_id") }
     )
     private List<RestaurantUserEntity> restaurantUsers;
-
+    @OneToMany
+    private List<ReservationEntity> reservationEntities;
     @Override
     public String toString() {
         return "RestaurantEntity{" +
