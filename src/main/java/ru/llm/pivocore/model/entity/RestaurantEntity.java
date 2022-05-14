@@ -33,7 +33,7 @@ public class RestaurantEntity {
     private String website;
 
     @Column(name="phone_number")
-    private Character phoneNumber;
+    private String phoneNumber;
 
     @Column(name="email")
     private String email;

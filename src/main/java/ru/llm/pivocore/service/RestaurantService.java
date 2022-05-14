@@ -11,6 +11,7 @@ import ru.llm.pivocore.model.dto.RestaurantDto;
 import ru.llm.pivocore.model.entity.RestaurantEntity;
 import ru.llm.pivocore.model.entity.RestaurantUserEntity;
 import ru.llm.pivocore.model.request.CreateRestaurantRequest;
+import ru.llm.pivocore.model.request.UpdateRestaurantRequest;
 import ru.llm.pivocore.repository.RestaurantRepository;
 
 import java.util.ArrayList;
@@ -57,6 +58,26 @@ public class RestaurantService {
         } catch (Exception e) {
             throw new RestaurantException(e.getMessage(), e.getCause());
         }
+    }
+
+    @Transactional
+    public RestaurantDto updateRestaurant(UpdateRestaurantRequest request) {
+        val user = userService.getCurrentUserFromSecContext();
+        val restaurants = user.getRestaurantList();
+        val restaurantToUpdate = restaurants.stream()
+                .filter(restaurant -> restaurant.getId().equals(request.getRestaurantId())).findFirst();
+        if (restaurantToUpdate.isEmpty()) {
+            throw new RestaurantUpdateException("No such id");
+        }
+        var updated = restaurantToUpdate.get();
+        updated.setEmail(request.getEmail() != null ? request.getEmail() : updated.getEmail());
+        updated.setLocation(request.getLocation() != null ? request.getLocation() : updated.getLocation());
+        updated.setName(request.getName() != null ? request.getName() : updated.getName());
+        updated.setPhoneNumber(request.getPhoneNumber() != null ? request.getPhoneNumber() : updated.getPhoneNumber());
+        updated.setIsActive(request.getIsActive() != null ? request.getIsActive() : updated.getIsActive());
+        updated = repository.save(updated);
+        restaurantToUpdate.get().setEmail(request.getEmail());
+        return mapper.entityToDto(updated);
     }
 
     private void linkRestaurantUserToRestaurant(RestaurantUserEntity user, RestaurantEntity restaurant) {

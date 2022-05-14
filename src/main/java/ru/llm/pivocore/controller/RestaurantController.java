@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.llm.pivocore.model.dto.RestaurantDto;
 import ru.llm.pivocore.model.request.CreateRestaurantRequest;
+import ru.llm.pivocore.model.request.UpdateRestaurantRequest;
 import ru.llm.pivocore.service.RestaurantService;
 
 import java.security.Principal;
@@ -26,6 +27,13 @@ public class RestaurantController {
     @GetMapping(value = "/")
     private @ResponseBody List<RestaurantDto> listRestaurants() {
         return restaurantService.listRestaurants();
+    }
+
+    @PatchMapping(value = "/")
+    private @ResponseBody RestaurantDto updateRestaurant(
+            @RequestBody UpdateRestaurantRequest request
+    ) {
+        return restaurantService.updateRestaurant(request);
     }
 
 }
