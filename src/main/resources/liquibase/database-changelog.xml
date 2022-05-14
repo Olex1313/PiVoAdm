@@ -10,4 +10,4 @@
     <include file="liquibase/1.0.0/create-restaurant-table.xml"/>
     <include file="liquibase/1.0.0/link-restaurants-to-restaurants-users.xml"/>
 
-</databaseChangeLog> 
+</databaseChangeLog>
