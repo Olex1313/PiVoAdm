@@ -38,7 +38,16 @@ public class PiVoJwtAuthorizationFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
         logger.info("Authorization filter invocation");
+        logger.info(request.getServletPath());
         if (request.getServletPath().equals("/api/login")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        if (request.getServletPath().endsWith("/login")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        if (request.getServletPath().endsWith("/register")) {
             filterChain.doFilter(request, response);
             return;
         }

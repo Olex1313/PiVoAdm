@@ -1,4 +1,5 @@
-package ru.llm.pivocore.model;
+package ru.llm.pivocore.model.request;
+
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,7 +7,7 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AppUserRegisterRequest {
+public class RestaurantUserRegisterRequest {
     @JsonProperty("first_name")
     private String firstName;
 
@@ -19,12 +20,13 @@ public class AppUserRegisterRequest {
     @JsonProperty("username")
     private String username;
 
-    @JsonProperty("email")
-    private String email;
+    @JsonProperty("phone_number")
+    private String phoneNumber;
 
     @JsonProperty("password")
     private String password;
 
-    @JsonProperty("date_of_birth")
-    private String dateOfBirth;
+    @JsonProperty("email")
+    private String email;
+
 }

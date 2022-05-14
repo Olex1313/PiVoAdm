@@ -1,6 +1,7 @@
 package ru.llm.pivocore.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service;
 import ru.llm.pivocore.enums.UserRoles;
 import ru.llm.pivocore.exception.AppUserServiceException;
 import ru.llm.pivocore.mapper.AppUserMapper;
-import ru.llm.pivocore.model.AppUserRegisterRequest;
+import ru.llm.pivocore.model.request.AppUserRegisterRequest;
 import ru.llm.pivocore.model.dto.AppUserDto;
 import ru.llm.pivocore.model.entity.AppUserEntity;
 import ru.llm.pivocore.repository.AppUserRepository;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Primary
 @RequiredArgsConstructor
 public class AppUserService implements UserDetailsService {
 
