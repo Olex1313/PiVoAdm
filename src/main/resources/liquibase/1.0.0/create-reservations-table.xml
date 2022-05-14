@@ -17,8 +17,7 @@
             <column name="app_user_id" type="BIGINT"/>
             <column name="restaurant_id" type="BIGINT" />
             <column name="table_id" type="BIGINT"/>
-            <column name="start_reservation_time" type="TIMESTAMP"/>
-            <column name="end_reservation_time" type="TIMESTAMP"/>
+            <column name="time" type="TIMESTAMP"/>
             <column name="deposit" type="INTEGER" defaultValue="1"/>
             <column name="amount_of_guests" type="INTEGER"/>
             <column name="approved_by" type="INTEGER"/>

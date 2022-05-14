@@ -8,5 +8,4 @@ import ru.llm.pivocore.model.entity.AppUserEntity;
 public interface AppUserRepository extends JpaRepository<AppUserEntity, Long> {
 
     AppUserEntity findByUsername(String username);
-
 }

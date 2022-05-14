@@ -2,12 +2,9 @@ package ru.llm.pivocore.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.llm.pivocore.model.request.AppUserRegisterRequest;
-import ru.llm.pivocore.model.request.ReservationRequest;
+import ru.llm.pivocore.model.AppUserRegisterRequest;
 import ru.llm.pivocore.model.dto.AppUserDto;
-import ru.llm.pivocore.model.dto.ReservationDto;
 import ru.llm.pivocore.service.AppUserService;
-import ru.llm.pivocore.service.ReservationService;
 
 import java.util.List;
 
@@ -17,7 +14,6 @@ import java.util.List;
 public class AppUserController {
 
     private final AppUserService appUserService;
-    private final ReservationService reservationService;
 
     @GetMapping(value = "/")
     public @ResponseBody List<AppUserDto> getAllAppUsers() {
