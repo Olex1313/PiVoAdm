@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import ru.llm.pivocore.enums.UserRoles;
 import ru.llm.pivocore.exception.AppUserServiceException;
 import ru.llm.pivocore.mapper.AppUserMapper;
-import ru.llm.pivocore.model.AppUserRegisterRequest;
+import ru.llm.pivocore.model.request.AppUserRegisterRequest;
 import ru.llm.pivocore.model.dto.AppUserDto;
 import ru.llm.pivocore.model.entity.AppUserEntity;
 import ru.llm.pivocore.repository.AppUserRepository;

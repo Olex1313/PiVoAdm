@@ -32,7 +32,7 @@ public class RestaurantUserEntity {
     private String middleName;
 
     @Column(name="username")
-    private String userName;
+    private String username;
 
     @Column(name="phone_number")
     private String phoneNumber;
@@ -53,7 +53,7 @@ public class RestaurantUserEntity {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", middleName='" + middleName + '\'' +
-                ", userName='" + userName + '\'' +
+                ", userName='" + username + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", passwordHash='" + passwordHash + '\'' +
                 ", email='" + email + '\'' +
@@ -66,7 +66,7 @@ public class RestaurantUserEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RestaurantUserEntity that = (RestaurantUserEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(middleName, that.middleName) && Objects.equals(userName, that.userName) && Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(passwordHash, that.passwordHash) && Objects.equals(email, that.email) && Objects.equals(isActive, that.isActive);
+        return Objects.equals(id, that.id) && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(middleName, that.middleName) && Objects.equals(username, that.username) && Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(passwordHash, that.passwordHash) && Objects.equals(email, that.email) && Objects.equals(isActive, that.isActive);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class RestaurantUserEntity {
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (middleName != null ? middleName.hashCode() : 0);
-        result = 31 * result + (userName != null ? userName.hashCode() : 0);
+        result = 31 * result + (username != null ? username.hashCode() : 0);
         result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
         result = 31 * result + (passwordHash != null ? passwordHash.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);

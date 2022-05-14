@@ -18,7 +18,7 @@ public class RestaurantUserDto implements UserDetails {
     private String firstName;
     private String lastName;
     private String middleName;
-    private String userName;
+    private String username;
     private String phoneNumber;
     private String passwordHash;
     private String email;
@@ -38,7 +38,7 @@ public class RestaurantUserDto implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userName;
+        return username;
     }
 
     @Override

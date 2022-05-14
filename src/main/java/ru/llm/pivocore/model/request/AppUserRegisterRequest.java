@@ -1,4 +1,4 @@
-package ru.llm.pivocore.model;
+package ru.llm.pivocore.model.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

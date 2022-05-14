@@ -6,5 +6,5 @@ import ru.llm.pivocore.model.entity.RestaurantUserEntity;
 
 @Repository
 public interface RestaurantUsersRepository extends JpaRepository<RestaurantUserEntity, Long> {
-    RestaurantUserEntity findByUserName(String userName);
+    RestaurantUserEntity findByUsername(String userName);
 }

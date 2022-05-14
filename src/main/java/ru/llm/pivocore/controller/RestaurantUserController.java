@@ -2,10 +2,9 @@ package ru.llm.pivocore.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ru.llm.pivocore.model.AppUserRegisterRequest;
-import ru.llm.pivocore.model.RestaurantUserRegisterRequest;
-import ru.llm.pivocore.model.dto.AppUserDto;
+import ru.llm.pivocore.model.request.RestaurantUserRegisterRequest;
 import ru.llm.pivocore.model.dto.RestaurantUserDto;
 import ru.llm.pivocore.service.RestaurantUserService;
 
@@ -29,4 +28,5 @@ public class RestaurantUserController {
     ) {
         return restaurantUserService.register(registerRequest);
     }
+
 }

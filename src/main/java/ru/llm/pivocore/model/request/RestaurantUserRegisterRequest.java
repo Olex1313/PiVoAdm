@@ -1,4 +1,4 @@
-package ru.llm.pivocore.model;
+package ru.llm.pivocore.model.request;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -18,7 +18,7 @@ public class RestaurantUserRegisterRequest {
     private String middleName;
 
     @JsonProperty("username")
-    private String userName;
+    private String username;
 
     @JsonProperty("phone_number")
     private String phoneNumber;

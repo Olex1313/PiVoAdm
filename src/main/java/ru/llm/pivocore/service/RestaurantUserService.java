@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.llm.pivocore.enums.UserRoles;
 import ru.llm.pivocore.exception.RestaurantUserServiceException;
 import ru.llm.pivocore.mapper.RestaurantUserMapper;
-import ru.llm.pivocore.model.RestaurantUserRegisterRequest;
+import ru.llm.pivocore.model.request.RestaurantUserRegisterRequest;
 import ru.llm.pivocore.model.dto.RestaurantUserDto;
 import ru.llm.pivocore.model.entity.RestaurantUserEntity;
 import ru.llm.pivocore.repository.RestaurantUsersRepository;
@@ -51,28 +51,27 @@ public class RestaurantUserService implements UserDetailsService {
 
     public RestaurantUserDto register(RestaurantUserRegisterRequest restaurantUserRegisterRequest) {
         var restaurantUserDto = RestaurantUserDto.builder()
-                .firstName(restaurantUserRegisterRequest.getFirstName())
-                .lastName(restaurantUserRegisterRequest.getLastName())
-                .middleName(restaurantUserRegisterRequest.getMiddleName())
-                .userName(restaurantUserRegisterRequest.getUserName())
-                .phoneNumber(restaurantUserRegisterRequest.getPhoneNumber())
+                .username(restaurantUserRegisterRequest.getUsername())
                 .email(restaurantUserRegisterRequest.getEmail())
-                .passwordHash(restaurantUserRegisterRequest.getPassword())
+                .firstName(restaurantUserRegisterRequest.getFirstName())
+                .middleName(restaurantUserRegisterRequest.getMiddleName())
+                .lastName(restaurantUserRegisterRequest.getLastName())
                 .dateOfRegistration(LocalDate.now().toString())
+                .passwordHash(restaurantUserRegisterRequest.getPassword())
                 .enabled(true)
                 .build();
-
         var entity = restaurantUserMapper.dtoToEntity(restaurantUserDto);
         return restaurantUserMapper.entityToDto(save(entity));
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        var restaurantUserEntity = restaurantUsersRepository.findByUserName(username);
+        var restaurantUserEntity = restaurantUsersRepository.findByUsername(username);
         if (restaurantUserEntity == null) {
             throw new UsernameNotFoundException(username);
         }
         var authorities = List.of(new SimpleGrantedAuthority(UserRoles.RESTAURANT_USER.name()));
-        return new User(restaurantUserEntity.getUserName(), restaurantUserEntity.getPasswordHash(), authorities);
+        return new User(restaurantUserEntity.getUsername(), restaurantUserEntity.getPasswordHash(), authorities);
     }
+
 }
