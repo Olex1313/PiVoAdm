@@ -32,7 +32,7 @@ public class ReservationEntity {
     private Instant endReservationTime;
 
     @Column(name = "deposit")
-    private Currency deposit;
+    private Integer deposit;
 
     @Column(name = "amount_of_guests")
     private Short amountOfGuests;

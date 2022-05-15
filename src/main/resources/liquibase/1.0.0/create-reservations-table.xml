@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
       https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
 
-    <changeSet id="create_reservations_id_seq" author="vladislavmoiseenkov1" dbms="postgresql" created="12.05.2022">
+    <changeSet id="create_reservations_id_seq" author="vladislavmoiseenkov1" dbms="postgresql" created="15.05.2022">
         <createSequence incrementBy="25" sequenceName="reservations_id_generator" startValue="1"/>
     </changeSet>
 
@@ -26,9 +26,13 @@
         </createTable>
 
 
-        <addForeignKeyConstraint baseTableName="reservations" baseColumnNames="restaurant_id"
+        <addForeignKeyConstraint baseTableName="reservations" baseColumnNames="app_user_id"
                                  constraintName="reservations_app_users_fk" referencedTableName="app_users"
                                  referencedColumnNames="app_user_id"/>
+
+        <addForeignKeyConstraint baseTableName="reservations" baseColumnNames="restaurant_id"
+                                 constraintName="reservations_restaurants_fk" referencedTableName="restaurants"
+                                 referencedColumnNames="restaurant_id"/>
 
     </changeSet>
 

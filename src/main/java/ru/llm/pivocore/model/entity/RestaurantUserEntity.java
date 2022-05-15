@@ -56,10 +56,6 @@ public class RestaurantUserEntity {
     )
     private List<RestaurantEntity> restaurantList;
 
-//    @ManyToOne
-//    @JoinColumn(name="restaurant_id")
-//    private RestaurantEntity restaurant;
-
     @OneToMany
     private List<ReservationEntity> reservationWaitSet;
 

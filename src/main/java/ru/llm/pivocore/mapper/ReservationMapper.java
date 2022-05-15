@@ -7,6 +7,7 @@ import ru.llm.pivocore.model.entity.ReservationEntity;
 
 @Mapper
 public interface ReservationMapper {
+
     ReservationDto entityToDto(ReservationEntity reservationEntity);
     ReservationEntity dtoToEntity(ReservationDto reservationDto);
 }

@@ -47,8 +47,9 @@ public class RestaurantEntity {
             inverseJoinColumns = { @JoinColumn(name = "restaurant_user_id") }
     )
     private List<RestaurantUserEntity> restaurantUsers;
+
     @OneToMany
-    @JoinColumn(name = "reservation_id")
+    @JoinColumn(name = "restaurant_id")
     private List<ReservationEntity> reservations;
 
     @OneToMany

@@ -6,6 +6,7 @@ import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.llm.pivocore.model.dto.ReservationDto;
 import ru.llm.pivocore.model.dto.ReservationResponseDto;
+import ru.llm.pivocore.model.request.ReservationRequest;
 import ru.llm.pivocore.model.request.RestaurantUserRegisterRequest;
 import ru.llm.pivocore.model.dto.RestaurantUserDto;
 import ru.llm.pivocore.service.ReservationService;
@@ -21,6 +22,7 @@ public class RestaurantUserController {
 
     private final RestaurantUserService restaurantUserService;
     private final RestaurantService restaurantService;
+    private final ReservationService reservationService;
 
     @GetMapping(value = "/")
     public @ResponseBody List<RestaurantUserDto> getAllRestaurantUsers() {
@@ -36,11 +38,11 @@ public class RestaurantUserController {
 
     @GetMapping(value = "/reservations")
     public @ResponseBody List<ReservationDto> getAllCurrentReservations(@RequestParam Long restaurantId) {
-        return restaurantService.getAllReservations(restaurantId);
+        return reservationService.getAllReservations(restaurantId);
     }
 
     @PostMapping(value = "/approve")
     public @ResponseBody ReservationResponseDto submitReservation(@RequestParam Long reservationId) {
-        return restaurantService.approveById(reservationId);
+        return reservationService.approveById(reservationId);
     }
 }

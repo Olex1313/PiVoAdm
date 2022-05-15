@@ -7,6 +7,7 @@ import lombok.Data;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Currency;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -25,5 +26,5 @@ public class ReservationRequest {
     private Integer deposit;
 
     @JsonProperty("amount_of_guests")
-    private Integer amountOfGuests;
+    private Short amountOfGuests;
 }

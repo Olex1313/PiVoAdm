@@ -17,6 +17,6 @@ public class ReservationDto {
     private Long restaurantId;
     private Instant startReservationTime;
     private Instant endReservationTime;
-    private Currency deposit;
+    private Integer deposit;
     private Short amountOfGuests;
 }

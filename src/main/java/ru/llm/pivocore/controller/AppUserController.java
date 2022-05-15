@@ -2,6 +2,7 @@ package ru.llm.pivocore.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ru.llm.pivocore.model.dto.ReservationDto;
 
 import ru.llm.pivocore.model.dto.AppUserDto;
 import ru.llm.pivocore.model.request.AppUserRegisterRequest;
@@ -11,7 +12,9 @@ import ru.llm.pivocore.model.dto.ReservationDto;
 import ru.llm.pivocore.model.dto.ReviewDto;
 import ru.llm.pivocore.model.request.AppUserRegisterRequest;
 import ru.llm.pivocore.model.dto.AppUserDto;
+import ru.llm.pivocore.model.request.ReservationRequest;
 import ru.llm.pivocore.service.AppUserService;
+import ru.llm.pivocore.service.ReservationService;
 import ru.llm.pivocore.service.ReservationService;
 import ru.llm.pivocore.service.ReviewService;
 import ru.llm.pivocore.service.ReservationService;
@@ -28,6 +31,7 @@ public class AppUserController {
     private final AppUserService appUserService;
 
     private final ReviewService reviewService;
+    private final ReservationService reservationService;
 
     @GetMapping(value = "")
     public @ResponseBody List<AppUserDto> getAllAppUsers() {
@@ -39,6 +43,10 @@ public class AppUserController {
             @RequestBody AppUserRegisterRequest registerRequest
     ) {
         return appUserService.registerUser(registerRequest);
+    }
+    @PostMapping(value = "/reserve")
+    public @ResponseBody ReservationDto reserve(@RequestBody ReservationRequest reservationRequest) {
+        return reservationService.createReservation(reservationRequest);
     }
 
     @GetMapping(value = { "/reviews/{userId}", "/reviews" })
