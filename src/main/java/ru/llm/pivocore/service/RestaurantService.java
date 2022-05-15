@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.llm.pivocore.exception.RestaurantCreateException;
 import ru.llm.pivocore.exception.RestaurantException;
+import ru.llm.pivocore.exception.RestaurantNotFoundException;
+import ru.llm.pivocore.exception.RestaurantUpdateException;
 import ru.llm.pivocore.mapper.RestaurantMapper;
 import ru.llm.pivocore.model.dto.RestaurantDto;
 import ru.llm.pivocore.model.entity.RestaurantEntity;
@@ -86,6 +88,14 @@ public class RestaurantService {
             restaurant.getRestaurantUsers().add(user);
         } else {
             restaurant.getRestaurantUsers().add(user);
+        }
+    }
+
+    public RestaurantEntity getById(Long restaurantId) {
+        try {
+            return repository.getById(restaurantId);
+        } catch (Exception e) {
+            throw new RestaurantNotFoundException(e.getMessage(), e.getCause());
         }
     }
 

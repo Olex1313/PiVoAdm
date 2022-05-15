@@ -9,5 +9,6 @@
     <include file="liquibase/1.0.0/create-app-user-table.xml"/>
     <include file="liquibase/1.0.0/create-restaurant-table.xml"/>
     <include file="liquibase/1.0.0/link-restaurants-to-restaurants-users.xml"/>
+    <include file="liquibase/1.0.0/create-review-entity.xml"/>
 
 </databaseChangeLog>

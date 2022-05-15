@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+
+    <changeSet id="create-review-seq" author="aleksejlimonov">
+        <createSequence sequenceName="review_seq" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="create-review-table" author="aleksejlimonov">
+        <createTable tableName="reviews">
+            <column name="review_id" type="SERIAL">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_reviews"/>
+            </column>
+            <column name="text" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="score" type="NUMERIC(2, 0)"/>
+            <column name="app_user_id" type="BIGINT"/>
+            <column name="restaurant_id" type="BIGINT"/>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="app_user_id" baseTableName="reviews"
+                                 constraintName="FK_REVIEWS_ON_APP_USER" referencedColumnNames="app_user_id"
+                                 referencedTableName="app_users"/>
+        <addForeignKeyConstraint baseColumnNames="restaurant_id" baseTableName="reviews"
+                                 constraintName="FK_REVIEWS_ON_RESTAURANT" referencedColumnNames="restaurant_id"
+                                 referencedTableName="restaurants"/>
+    </changeSet>
+
+
+</databaseChangeLog>
