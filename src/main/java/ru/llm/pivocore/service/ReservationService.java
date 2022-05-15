@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 import java.time.LocalDate;
 
@@ -50,6 +51,7 @@ public class ReservationService {
 
     @Transactional
     public List<ReservationDto> getAllReservations(Long restaurantId) {
+        List<ReservationDto> dtoToReturn = new ArrayList<>();
         val restaurantUserEntity = getCurrentRestUserFromSecContext();
         Optional<RestaurantEntity> restaurant = restaurantUserEntity.getRestaurantList()
                 .stream().filter(rest -> rest.getId().equals(restaurantId))
@@ -57,9 +59,28 @@ public class ReservationService {
         if (restaurant.isEmpty()) {
             throw new RestaurantException("Restaurant is not found!");
         }
-        return restaurant.get().getReservations()
-                .stream().map(reservationMapper::entityToDto).toList();
+        List<ReservationEntity> currReservationsAssignedToRestaurant = restaurant.get().getReservations();
+        if (currReservationsAssignedToRestaurant != null) {
+            currReservationsAssignedToRestaurant.
+                forEach(
+                        reservationEntity -> {reservationEntity.setRestaurantUser(restaurantUserEntity);
+                        });
+            List<ReservationEntity> currReservationsUserHas = restaurantUserEntity.getReservations();
+            if (currReservationsUserHas == null) {
+                currReservationsUserHas = new ArrayList<>();
+            }
+            currReservationsAssignedToRestaurant.stream()
+                    .filter(reservationEntity -> reservationEntity.getRestaurantUser() == null)
+                    .forEach(currReservationsUserHas::add);
+            dtoToReturn = reservationsRepository.
+                    saveAll(currReservationsAssignedToRestaurant)
+                    .stream()
+                    .map(reservationMapper::entityToDto)
+                    .collect(Collectors.toList());
+        }
+        return dtoToReturn;
     }
+
 
     public ReservationResponseDto approveById(Long reservationId) {
         RestaurantUserEntity restaurantUserEntity = getCurrentRestUserFromSecContext();
@@ -89,11 +110,9 @@ public class ReservationService {
         if (restaurant.isEmpty()) {
             throw new RestaurantException("Restaurant is not found!");
         }
-
         RestaurantEntity restaurantEntity = restaurant.get();
         reservationEntity.setRestaurant(restaurantEntity);
         linkReservationToRestaurant(reservationEntity, restaurantEntity);
-        reservationsRepository.save(reservationEntity);
         return reservationMapper.entityToDto(reservationsRepository.save(reservationEntity));
     }
 

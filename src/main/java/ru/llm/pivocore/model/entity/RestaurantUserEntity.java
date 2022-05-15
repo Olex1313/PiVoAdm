@@ -57,7 +57,8 @@ public class RestaurantUserEntity {
     private List<RestaurantEntity> restaurantList;
 
     @OneToMany
-    private List<ReservationEntity> reservationWaitSet;
+    @JoinColumn(name="approved_by")
+    private List<ReservationEntity> reservations;
 
     @Override
     public String toString() {

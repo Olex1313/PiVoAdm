@@ -36,13 +36,4 @@ public class RestaurantUserController {
         return restaurantUserService.register(registerRequest);
     }
 
-    @GetMapping(value = "/reservations")
-    public @ResponseBody List<ReservationDto> getAllCurrentReservations(@RequestParam Long restaurantId) {
-        return reservationService.getAllReservations(restaurantId);
-    }
-
-    @PostMapping(value = "/approve")
-    public @ResponseBody ReservationResponseDto submitReservation(@RequestParam Long reservationId) {
-        return reservationService.approveById(reservationId);
-    }
 }
