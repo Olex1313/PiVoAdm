@@ -4,6 +4,6 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class ReservationResponseDto {
-    private Long reservation_id;
+    private Long reservationId;
     private Boolean isApproved;
 }

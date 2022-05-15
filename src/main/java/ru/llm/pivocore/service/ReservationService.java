@@ -1,6 +1,7 @@
 package ru.llm.pivocore.service;
 
 import lombok.AllArgsConstructor;
+import lombok.val;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,18 +51,19 @@ public class ReservationService {
                 .startReservationTime(reservationRequest.getStartReservationTime())
                 .endReservationTime(reservationRequest.getEndReservationTime())
                 .build();
-        Authentication authentication = authenticationFacade.getAuthentication();
-        AppUserEntity appUserEntity = appUserRepository.findByUsername(authentication.getName());
-        ReservationEntity reservationEntity = reservationMapper.dtoToEntity(reservationDto);
+        val appUserEntity = getCurrentUserFromSecContext();
+        val reservationEntity = reservationMapper.dtoToEntity(reservationDto);
         reservationEntity.setUser(appUserEntity);
         Optional<RestaurantEntity> restaurant = restaurantRepository.findById(reservationRequest.getRestaurantId());
         if (restaurant.isEmpty()) {
             throw new RestaurantException("Restaurant is not found!");
         }
         reservationEntity.setRestaurant(restaurant.get());
-        reservationsRepository.save(reservationEntity);
-        return reservationDto;
+        return reservationMapper.entityToDto(reservationsRepository.save(reservationEntity));
     }
 
-
+    private AppUserEntity getCurrentUserFromSecContext() {
+        Authentication authentication = authenticationFacade.getAuthentication();
+        return appUserRepository.findByUsername(authentication.getName());
+    }
 }

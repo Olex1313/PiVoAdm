@@ -9,6 +9,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Currency;
 import java.util.Objects;
 
 @Entity
@@ -31,10 +32,10 @@ public class ReservationEntity {
     private Instant endReservationTime;
 
     @Column(name = "deposit")
-    private Integer deposit;
+    private Currency deposit;
 
     @Column(name = "amount_of_guests")
-    private Integer amountOfGuests;
+    private Short amountOfGuests;
 
     @Column(name = "approve_time")
     private Instant approve_time;

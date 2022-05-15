@@ -35,7 +35,7 @@ public class RestaurantUserController {
     }
 
     @GetMapping(value = "/reservations")
-    public @ResponseBody List<ReservationDto> getAllCurrentReservations(@RequestParam Integer restaurantId) {
+    public @ResponseBody List<ReservationDto> getAllCurrentReservations(@RequestParam Long restaurantId) {
         return restaurantService.getAllReservations(restaurantId);
     }
 

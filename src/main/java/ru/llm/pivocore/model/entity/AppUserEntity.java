@@ -46,6 +46,7 @@ public class AppUserEntity {
     private String dateOfRegistration;
 
     @OneToMany
+    @JoinColumn(name = "reservation_id")
     private Set<ReservationEntity> reservations;
 
     @Override

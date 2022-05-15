@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -49,7 +48,13 @@ public class RestaurantEntity {
     )
     private List<RestaurantUserEntity> restaurantUsers;
     @OneToMany
-    private List<ReservationEntity> reservationEntities;
+    @JoinColumn(name = "reservation_id")
+    private List<ReservationEntity> reservations;
+
+    @OneToMany
+    @JoinColumn(name = "table_id")
+    private List<RestaurantTableEntity> restaurantTables;
+
     @Override
     public String toString() {
         return "RestaurantEntity{" +

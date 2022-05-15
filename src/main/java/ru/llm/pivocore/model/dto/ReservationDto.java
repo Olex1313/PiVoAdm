@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Currency;
 
 @Getter
 @Setter
@@ -16,6 +17,6 @@ public class ReservationDto {
     private Long restaurantId;
     private Instant startReservationTime;
     private Instant endReservationTime;
-    private Integer deposit;
-    private Integer amountOfGuests;
+    private Currency deposit;
+    private Short amountOfGuests;
 }
