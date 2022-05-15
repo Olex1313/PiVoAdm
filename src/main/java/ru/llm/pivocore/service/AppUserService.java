@@ -1,8 +1,10 @@
 package ru.llm.pivocore.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.llm.pivocore.enums.UserRoles;
 import ru.llm.pivocore.exception.AppUserServiceException;
+import ru.llm.pivocore.exception.RestaurantUserServiceException;
 import ru.llm.pivocore.mapper.AppUserMapper;
 import ru.llm.pivocore.model.request.AppUserRegisterRequest;
 import ru.llm.pivocore.model.dto.AppUserDto;
@@ -20,6 +23,7 @@ import ru.llm.pivocore.repository.AppUserRepository;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,6 +37,7 @@ public class AppUserService implements UserDetailsService {
 
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     public List<AppUserDto> getAll() {
         try {
             var appUserEntities = appUserRepository.findAll();
@@ -48,6 +53,13 @@ public class AppUserService implements UserDetailsService {
     public AppUserEntity save(AppUserEntity appUserEntity) {
         appUserEntity.setPasswordHash(passwordEncoder.encode(appUserEntity.getPasswordHash()));
         return appUserRepository.save(appUserEntity);
+    }
+
+    @Transactional
+    public Optional<AppUserDto> getById(Long id) {
+        val entity = appUserRepository.findById(id);
+        if (entity.isEmpty()) return Optional.empty();
+        return Optional.of(appUserMapper.entityToDto(entity.get()));
     }
 
     @Override
@@ -70,10 +82,21 @@ public class AppUserService implements UserDetailsService {
                 .email(registerRequest.getEmail())
                 .passwordHash(registerRequest.getPassword())
                 .dateOfRegistration(LocalDate.now().toString())
-                .enabled(true)
                 .build();
         var entity = appUserMapper.dtoToEntity(appUserDto);
         return appUserMapper.entityToDto(save(entity));
+    }
+
+    @Transactional
+    public AppUserEntity getCurrentUserFromSecContext() {
+        val currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        try {
+            return appUserRepository.findByUsername(currentUsername);
+        } catch (Exception e) {
+            throw new AppUserServiceException(
+                    "Couldn't retrieve app user for current user:%s in session".formatted(currentUsername)
+            );
+        }
     }
 
 }

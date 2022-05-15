@@ -72,7 +72,6 @@ public class RestaurantUserService implements UserDetailsService {
                 .lastName(restaurantUserRegisterRequest.getLastName())
                 .dateOfRegistration(LocalDate.now().toString())
                 .passwordHash(restaurantUserRegisterRequest.getPassword())
-                .enabled(true)
                 .build();
         var entity = restaurantUserMapper.dtoToEntity(restaurantUserDto);
         return restaurantUserMapper.entityToDto(save(entity));

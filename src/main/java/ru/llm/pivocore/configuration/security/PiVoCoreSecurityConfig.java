@@ -36,6 +36,7 @@ class PiVoCoreSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(STATELESS);
         http.authorizeRequests().antMatchers("/api/restaurant_user/**", "/api/restaurant/**").hasAuthority(RESTAURANT_USER.name());
         http.authorizeRequests().antMatchers("/api/app_user/**").hasAuthority(APP_USER.name());
+        http.authorizeRequests().antMatchers("/api/reviews").hasAnyAuthority(APP_USER.name());
         http.addFilter(authenticationFilter);
         http.addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class);
     }

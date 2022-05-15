@@ -2,9 +2,11 @@ package ru.llm.pivocore.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ru.llm.pivocore.model.dto.ReviewDto;
 import ru.llm.pivocore.model.request.AppUserRegisterRequest;
 import ru.llm.pivocore.model.dto.AppUserDto;
 import ru.llm.pivocore.service.AppUserService;
+import ru.llm.pivocore.service.ReviewService;
 
 import java.util.List;
 
@@ -15,7 +17,9 @@ public class AppUserController {
 
     private final AppUserService appUserService;
 
-    @GetMapping(value = "/")
+    private final ReviewService reviewService;
+
+    @GetMapping(value = "")
     public @ResponseBody List<AppUserDto> getAllAppUsers() {
         return appUserService.getAll();
     }
@@ -25,6 +29,11 @@ public class AppUserController {
             @RequestBody AppUserRegisterRequest registerRequest
     ) {
         return appUserService.registerUser(registerRequest);
+    }
+
+    @GetMapping(value = { "/reviews/{userId}", "/reviews" })
+    public @ResponseBody List<ReviewDto> gatherReviews(@PathVariable(required = false) Long userId) {
+        return reviewService.gatherReviewsForUser(userId);
     }
 
 }

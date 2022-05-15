@@ -1,4 +1,4 @@
-package ru.llm.pivocore.service;
+package ru.llm.pivocore.exception;
 
 import ru.llm.pivocore.exception.RestaurantException;
 

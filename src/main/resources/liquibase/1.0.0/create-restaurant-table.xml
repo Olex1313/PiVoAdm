@@ -25,7 +25,9 @@
             <column name="email" type="TEXT">
                 <constraints nullable="true"/>
             </column>
-            <column name="is_active" type="BOOLEAN" defaultValueBoolean="true"/>
+            <column name="is_active" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
 

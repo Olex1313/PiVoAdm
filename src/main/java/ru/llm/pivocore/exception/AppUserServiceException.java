@@ -6,6 +6,10 @@ public class AppUserServiceException extends RuntimeException {
         super();
     }
 
+    public AppUserServiceException(String message) {
+        super(message);
+    }
+
     public AppUserServiceException(String message, Throwable cause) {
         super(message, cause);
     }
