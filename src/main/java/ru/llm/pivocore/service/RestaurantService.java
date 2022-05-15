@@ -1,18 +1,14 @@
 package ru.llm.pivocore.service;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.llm.pivocore.exception.RestaurantCreateException;
 import ru.llm.pivocore.exception.RestaurantException;
 import ru.llm.pivocore.exception.RestaurantNotFoundException;
-import ru.llm.pivocore.exception.RestaurantUserServiceException;
-import ru.llm.pivocore.mapper.ReservationMapper;
+import ru.llm.pivocore.exception.RestaurantUpdateException;
 import ru.llm.pivocore.mapper.RestaurantMapper;
-import ru.llm.pivocore.model.dto.ReservationDto;
-import ru.llm.pivocore.model.dto.ReservationResponseDto;
 import ru.llm.pivocore.model.dto.RestaurantDto;
 import ru.llm.pivocore.model.entity.ReservationEntity;
 import ru.llm.pivocore.exception.RestaurantCreateException;
@@ -25,28 +21,21 @@ import ru.llm.pivocore.model.entity.RestaurantEntity;
 import ru.llm.pivocore.model.entity.RestaurantUserEntity;
 import ru.llm.pivocore.model.request.CreateRestaurantRequest;
 import ru.llm.pivocore.model.request.UpdateRestaurantRequest;
-import ru.llm.pivocore.repository.ReservationsRepository;
 import ru.llm.pivocore.repository.RestaurantRepository;
-import ru.llm.pivocore.repository.RestaurantUsersRepository;
 
-
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RestaurantService {
 
-    private final RestaurantUsersRepository restaurantUsersRepository;
-    private final ReservationsRepository reservationsRepository;
-    private final RestaurantRepository restaurantRepository;
-    private final ReservationMapper reservationMapper;
-    private final RestaurantMapper restaurantMapper;
+    private final RestaurantRepository repository;
+
     private final RestaurantUserService userService;
 
+    private final RestaurantMapper mapper;
 
     @Transactional
     public RestaurantDto createRestaurant(CreateRestaurantRequest request) {
@@ -60,9 +49,9 @@ public class RestaurantService {
                     .website(request.getWebsite())
                     .isActive(true)
                     .build();
-            val restaurantEntity = restaurantMapper.dtoToEntity(rawDto);
+            val restaurantEntity = mapper.dtoToEntity(rawDto);
             linkRestaurantUserToRestaurant(restaurantUser, restaurantEntity);
-            restaurantRepository.save(restaurantEntity);
+            repository.save(restaurantEntity);
             return rawDto;
         } catch (Exception e) {
             throw new RestaurantCreateException(e.getMessage(), e.getCause());
@@ -74,12 +63,11 @@ public class RestaurantService {
         try {
             val restaurantUser = userService.getCurrentUserFromSecContext();
             val restaurants = restaurantUser.getRestaurantList();
-            return restaurants.stream().map(restaurantMapper::entityToDto).collect(Collectors.toList());
+            return restaurants.stream().map(mapper::entityToDto).collect(Collectors.toList());
         } catch (Exception e) {
             throw new RestaurantException(e.getMessage(), e.getCause());
         }
     }
-
 
     @Transactional
     public RestaurantDto updateRestaurant(UpdateRestaurantRequest request) {
@@ -96,9 +84,9 @@ public class RestaurantService {
         updated.setName(request.getName() != null ? request.getName() : updated.getName());
         updated.setPhoneNumber(request.getPhoneNumber() != null ? request.getPhoneNumber() : updated.getPhoneNumber());
         updated.setIsActive(request.getIsActive() != null ? request.getIsActive() : updated.getIsActive());
-        updated = restaurantRepository.save(updated);
+        updated = repository.save(updated);
         restaurantToUpdate.get().setEmail(request.getEmail());
-        return restaurantMapper.entityToDto(updated);
+        return mapper.entityToDto(updated);
     }
 
     private void linkRestaurantUserToRestaurant(RestaurantUserEntity user, RestaurantEntity restaurant) {
@@ -112,22 +100,10 @@ public class RestaurantService {
 
     public RestaurantEntity getById(Long restaurantId) {
         try {
-            return restaurantRepository.getById(restaurantId);
+            return repository.getById(restaurantId);
         } catch (Exception e) {
             throw new RestaurantNotFoundException(e.getMessage(), e.getCause());
         }
-    }
-    @Transactional
-    public List<ReservationDto> getAllReservations(Long restaurantId) {
-        val restaurantUserEntity = getCurrentUserFromSecContext();
-        Optional<RestaurantEntity> restaurant = restaurantUserEntity.getRestaurantList()
-                .stream().filter(rest -> rest.getId().equals(restaurantId))
-                .findFirst();
-        if (restaurant.isEmpty()) {
-            throw new RestaurantException("Restaurant is not found!");
-        }
-        return restaurant.get().getReservations()
-                .stream().map(reservationMapper::entityToDto).toList();
     }
 
     public ReservationResponseDto approveById(Long reservationId) {

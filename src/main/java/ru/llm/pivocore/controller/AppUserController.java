@@ -8,13 +8,15 @@ import ru.llm.pivocore.model.request.AppUserRegisterRequest;
 import ru.llm.pivocore.model.request.AppUserRegisterRequest;
 import ru.llm.pivocore.model.request.ReservationRequest;
 import ru.llm.pivocore.model.dto.ReservationDto;
+import ru.llm.pivocore.model.dto.ReviewDto;
 import ru.llm.pivocore.model.request.AppUserRegisterRequest;
-import ru.llm.pivocore.model.request.ReservationRequest;
+import ru.llm.pivocore.model.dto.AppUserDto;
 import ru.llm.pivocore.service.AppUserService;
 import ru.llm.pivocore.service.ReservationService;
 import ru.llm.pivocore.service.ReviewService;
 import ru.llm.pivocore.service.ReservationService;
 import ru.llm.pivocore.service.ReservationService;
+import ru.llm.pivocore.service.ReviewService;
 
 import java.util.List;
 
@@ -24,7 +26,6 @@ import java.util.List;
 public class AppUserController {
 
     private final AppUserService appUserService;
-    private final ReservationService reservationService;
 
     private final ReviewService reviewService;
 
