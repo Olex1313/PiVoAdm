@@ -18,6 +18,7 @@ import ru.llm.pivocore.exception.RestaurantUpdateException;
 import ru.llm.pivocore.mapper.RestaurantMapper;
 import ru.llm.pivocore.model.dto.RestaurantDto;
 import ru.llm.pivocore.model.entity.RestaurantEntity;
+import ru.llm.pivocore.model.entity.RestaurantTableEntity;
 import ru.llm.pivocore.model.entity.RestaurantUserEntity;
 import ru.llm.pivocore.model.request.CreateRestaurantRequest;
 import ru.llm.pivocore.model.request.UpdateRestaurantRequest;

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+      https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="create_restaurant_tables_id_seq" author="vladislavmoiseenkov" dbms="postgresql" created="15.05.2022">
+        <createSequence incrementBy="25" sequenceName="restaurant_tables_id_generator" startValue="1"/>
+    </changeSet>
+
+    <changeSet id="restaurant_table" author="vladislavmoiseenkov" dbms="postgresql" created="15.05.2022">
+        <createTable tableName="restaurant_tables">
+            <column name="table_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tables_pk"/>
+            </column>
+            <column name="restaurant_id" type="BIGINT"/>
+            <column name="table_num" type="INT"/>
+            <column name="max_amount" type="INT"/>
+            <column name="is_active" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="restaurant_tables" baseColumnNames="restaurant_id"
+                                 constraintName="restaurant_tables_restaurants_fk" referencedTableName="restaurants"
+                                 referencedColumnNames="restaurant_id"/>
+    </changeSet>
+
+
+</databaseChangeLog>

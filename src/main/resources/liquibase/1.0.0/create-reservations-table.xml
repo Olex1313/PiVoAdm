@@ -39,6 +39,11 @@
                                  referencedTableName="restaurant_users"
                                  referencedColumnNames="restaurant_user_id"/>
 
+        <addForeignKeyConstraint baseTableName="reservations" baseColumnNames="table_id"
+                                 constraintName="reservations_restaurant_tables_fk"
+                                 referencedTableName="restaurant_tables"
+                                 referencedColumnNames="table_id"/>
+
     </changeSet>
 
 </databaseChangeLog>

@@ -53,7 +53,7 @@ public class RestaurantEntity {
     private List<ReservationEntity> reservations;
 
     @OneToMany
-    @JoinColumn(name = "table_id")
+    @JoinColumn(name = "restaurant_id")
     private List<RestaurantTableEntity> restaurantTables;
 
     @Override

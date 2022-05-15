@@ -25,7 +25,13 @@ public class RestaurantTableEntity {
     private Integer maxAmount;
     @Column(name = "is_active")
     private Boolean isActive;
+
     @ManyToOne
     @JoinColumn(name="restaurant_id")
     private RestaurantEntity restaurant;
+
+    @OneToOne
+    @JoinColumn(name = "reservation_id")
+    private ReservationEntity reservation;
+
 }

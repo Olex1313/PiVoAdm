@@ -22,5 +22,4 @@ public class CreateRestaurantRequest {
 
     @JsonAlias("email")
     private String email;
-
 }

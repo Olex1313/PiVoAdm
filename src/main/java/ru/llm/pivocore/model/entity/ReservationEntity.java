@@ -52,6 +52,11 @@ public class ReservationEntity {
     @JoinColumn(name="approved_by")
     private RestaurantUserEntity restaurantUser;
 
+    @OneToOne
+    @JoinColumn(name = "reservation_id")
+    private RestaurantTableEntity restaurantTable;
+
+
     @Override
     public String toString() {
         return "ReservationEntity{" +
