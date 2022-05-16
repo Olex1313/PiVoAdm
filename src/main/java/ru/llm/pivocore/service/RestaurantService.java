@@ -35,6 +35,7 @@ public class RestaurantService {
 
     private final RestaurantRepository repository;
     private final UserContextSupplier userContextSupplier;
+    private final RestaurantMapper restaurantMapper;
     private final RestaurantMapper mapper;
 
     @Transactional
@@ -51,8 +52,7 @@ public class RestaurantService {
                     .build();
             val restaurantEntity = mapper.dtoToEntity(rawDto);
             linkRestaurantUserToRestaurant(restaurantUser, restaurantEntity);
-            repository.save(restaurantEntity);
-            return rawDto;
+            return restaurantMapper.entityToDto(repository.save(restaurantEntity));
         } catch (Exception e) {
             throw new RestaurantCreateException(e.getMessage(), e.getCause());
         }

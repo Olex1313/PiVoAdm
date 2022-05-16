@@ -26,11 +26,11 @@ public class RestaurantTableEntity {
     @Column(name = "is_active")
     private Boolean isActive;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="restaurant_id")
     private RestaurantEntity restaurant;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "table_id")
     private ReservationEntity reservation;
 

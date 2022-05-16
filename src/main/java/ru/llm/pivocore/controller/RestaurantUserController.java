@@ -21,8 +21,7 @@ import java.util.List;
 public class RestaurantUserController {
 
     private final RestaurantUserService restaurantUserService;
-    private final RestaurantService restaurantService;
-    private final ReservationService reservationService;
+
 
     @GetMapping(value = "/")
     public @ResponseBody List<RestaurantUserDto> getAllRestaurantUsers() {

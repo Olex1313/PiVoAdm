@@ -8,7 +8,7 @@ import ru.llm.pivocore.model.entity.RestaurantEntity;
 @Mapper
 public interface RestaurantMapper {
 
-    @Mapping(source = "id", target = "restaurantId")
+    @Mapping(target = "restaurantId", source = "entity.id")
     RestaurantDto entityToDto(RestaurantEntity entity);
 
     @Mapping(source = "restaurantId", target = "id")

@@ -10,7 +10,6 @@ import ru.llm.pivocore.model.entity.RestaurantUserEntity;
 @Mapper
 public interface RestaurantUserMapper {
 
-    @Mapping(target = "enabled", source="userName", defaultValue = "true")
     RestaurantUserDto entityToDto(RestaurantUserEntity entity);
 
     RestaurantUserEntity dtoToEntity(RestaurantUserDto dto);

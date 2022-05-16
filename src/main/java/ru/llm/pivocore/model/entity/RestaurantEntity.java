@@ -48,11 +48,11 @@ public class RestaurantEntity {
     )
     private List<RestaurantUserEntity> restaurantUsers;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "restaurant_id")
     private List<ReservationEntity> reservations;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "restaurant_id")
     private List<RestaurantTableEntity> restaurantTables;
 

@@ -56,7 +56,7 @@ public class RestaurantUserEntity {
     )
     private List<RestaurantEntity> restaurantList;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name="approved_by")
     private List<ReservationEntity> reservations;
 

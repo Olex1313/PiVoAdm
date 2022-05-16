@@ -2,16 +2,17 @@ package ru.llm.pivocore.service;
 
 import lombok.AllArgsConstructor;
 import lombok.val;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.llm.pivocore.configuration.security.facade.IAuthenticationFacade;
 import ru.llm.pivocore.configuration.security.suppliers.UserContextSupplier;
-import ru.llm.pivocore.exception.RestaurantException;
+import ru.llm.pivocore.exception.*;
 import ru.llm.pivocore.mapper.ReservationMapper;
 import ru.llm.pivocore.model.dto.ReservationResponseDto;
-import ru.llm.pivocore.model.entity.RestaurantEntity;
-import ru.llm.pivocore.model.entity.RestaurantUserEntity;
+import ru.llm.pivocore.model.entity.*;
 import ru.llm.pivocore.model.request.ReservationRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -21,12 +22,7 @@ import ru.llm.pivocore.mapper.ReservationMapper;
 import ru.llm.pivocore.model.ReservationRequest;
 import ru.llm.pivocore.model.dto.AppUserDto;
 import ru.llm.pivocore.model.dto.ReservationDto;
-import ru.llm.pivocore.model.entity.AppUserEntity;
-import ru.llm.pivocore.model.entity.ReservationEntity;
-import ru.llm.pivocore.repository.AppUserRepository;
-import ru.llm.pivocore.repository.ReservationsRepository;
-import ru.llm.pivocore.repository.RestaurantRepository;
-import ru.llm.pivocore.repository.RestaurantUsersRepository;
+import ru.llm.pivocore.repository.*;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -45,6 +41,7 @@ public class ReservationService {
     private final UserContextSupplier userContextSupplier;
     private final ReservationMapper reservationMapper;
     private final ReservationsRepository reservationsRepository;
+    private final TableRepository tableRepository;
     private final RestaurantRepository restaurantRepository;
 
 
@@ -80,19 +77,30 @@ public class ReservationService {
         return dtoToReturn;
     }
 
-
-    public ReservationResponseDto approveById(Long reservationId) {
-        RestaurantUserEntity restaurantUserEntity = userContextSupplier.getRestaurantUserEntityFromSecContext();
-        ReservationEntity reservationEntity = reservationsRepository.getById(reservationId);
-        // check tables
-        reservationEntity.setRestaurantUser(restaurantUserEntity);
+    public ReservationResponseDto approveReservationAssignedToRestaurant(Long restaurantId, Long reservationId) {
+        val restaurantEntity = restaurantRepository.getById(restaurantId);
+        val reservationEntity = reservationsRepository.getById(reservationId);
+        Optional<RestaurantTableEntity> suitableTable;
+        try{
+            suitableTable = findSuitableTable(restaurantEntity, reservationEntity);
+        } catch (RuntimeException e) {
+            throw new ApproveReservationException(e.getMessage());
+        }
+        if (suitableTable.isEmpty()) {
+            throw new DeclineReservationException("There are no suitable tables!");
+        }
+        RestaurantTableEntity restaurantTable = suitableTable.get();
+        restaurantTable.setIsActive(true);
+        tableRepository.save(restaurantTable);
         reservationEntity.setApprove_time(Instant.now());
-        return new ReservationResponseDto(
-                reservationId,
-                true
-        );
+        reservationEntity.setRestaurantTable(restaurantTable);
+        reservationsRepository.save(reservationEntity);
+        return ReservationResponseDto.
+                builder()
+                .reservationId(reservationId)
+                .isApproved(true)
+                .build();
     }
-
 
     public ReservationDto createReservation(ReservationRequest reservationRequest) {
         ReservationDto reservationDto = ReservationDto.builder()
@@ -111,8 +119,7 @@ public class ReservationService {
         }
         RestaurantEntity restaurantEntity = restaurant.get();
         reservationEntity.setRestaurant(restaurantEntity);
-
-//        linkReservationToRestaurant(reservationEntity, restaurantEntity);
+        linkReservationToRestaurant(reservationEntity, restaurantEntity);
         return reservationMapper.entityToDto(reservationsRepository.save(reservationEntity));
     }
 
@@ -121,6 +128,22 @@ public class ReservationService {
             restaurant.setReservations(new ArrayList<>());
         }
         restaurant.getReservations().add(reservation);
+    }
+
+    private Optional<RestaurantTableEntity> findSuitableTable(RestaurantEntity restaurant, ReservationEntity reservation) {
+        if (restaurant == null) {
+            throw new RestaurantNotFoundException("Restaurant does not exist;");
+        }
+        if (reservation == null) {
+            throw new ReservationNotFoundException("Reservation does not exist");
+        }
+        List<RestaurantTableEntity> finalRestaurantTables = restaurant.getRestaurantTables();
+        if (finalRestaurantTables == null) {
+            throw new TableNotFoundException("Restaurant does not have any tables");
+        }
+        return finalRestaurantTables.stream().filter(table -> reservation.getAmountOfGuests() <= table.getMaxAmount()
+                && !table.getIsActive())
+                .findFirst();
     }
 
 }

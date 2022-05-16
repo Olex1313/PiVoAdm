@@ -8,6 +8,7 @@ import ru.llm.pivocore.model.dto.ReservationResponseDto;
 import ru.llm.pivocore.service.ReservationService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/reservation")
@@ -21,7 +22,10 @@ public class ReservationController {
     }
 
     @PostMapping(value = "/approve")
-    public @ResponseBody ReservationResponseDto submitReservation(@RequestParam Long reservationId) {
-        return reservationService.approveById(reservationId);
+    public @ResponseBody ReservationResponseDto
+        submitReservation(@RequestParam Map<String, String> params) {
+        return reservationService
+                .approveReservationAssignedToRestaurant(Long.parseLong(params.get("restaurantId"))
+                        ,Long.parseLong(params.get("reservationId")));
     }
 }

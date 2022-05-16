@@ -40,19 +40,19 @@ public class ReservationEntity {
     @Column(name = "approve_time")
     private Instant approve_time;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="app_user_id")
     private AppUserEntity user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="restaurant_id")
     private RestaurantEntity restaurant;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="approved_by")
     private RestaurantUserEntity restaurantUser;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "table_id")
     private RestaurantTableEntity restaurantTable;
 

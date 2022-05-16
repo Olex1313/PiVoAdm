@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import ru.llm.pivocore.configuration.security.suppliers.UserContextSupplier;
 import ru.llm.pivocore.exception.BadRequestException;
 import ru.llm.pivocore.exception.RestaurantNotFoundException;
+import ru.llm.pivocore.exception.TableNotFoundException;
 import ru.llm.pivocore.mapper.TableMapper;
 import ru.llm.pivocore.model.dto.TableDto;
 import ru.llm.pivocore.model.entity.RestaurantEntity;
@@ -19,6 +20,7 @@ import ru.llm.pivocore.repository.TableRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -50,6 +52,18 @@ public class TableService {
         return tableMapper.entityToDto(tableRepository.save(tableEntity));
     }
 
+    public List<TableDto> getAllTablesOfRestaurant(Long restaurantId) {
+        Optional<RestaurantEntity> restaurant = restaurantRepository.findById(restaurantId);
+        if (restaurant.isEmpty()) {
+            throw new RestaurantNotFoundException("Couldn't find any tables, restaurant does not exist!");
+        }
+        log.info("restaurant exists");
+        List<RestaurantTableEntity> restaurantTables = restaurant.get().getRestaurantTables();;
+        if (restaurantTables == null) {
+            throw new TableNotFoundException("Restaurant does not have any tables");
+        }
+        return restaurantTables.stream().map(tableMapper::entityToDto).collect(Collectors.toList());
+    }
 
     private void linkTableToRestaurant(RestaurantEntity restaurant, RestaurantTableEntity tableEntity) {
         List<RestaurantTableEntity> tables = restaurant.getRestaurantTables();
