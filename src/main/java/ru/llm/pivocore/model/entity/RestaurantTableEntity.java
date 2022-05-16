@@ -20,9 +20,9 @@ public class RestaurantTableEntity {
     @SequenceGenerator(name = "restaurant_tables_id_generator", allocationSize = 25)
     private Long id;
     @Column(name = "table_num")
-    private Integer tableNum;
+    private Short tableNum;
     @Column(name = "max_amount")
-    private Integer maxAmount;
+    private Short maxAmount;
     @Column(name = "is_active")
     private Boolean isActive;
 
@@ -31,7 +31,7 @@ public class RestaurantTableEntity {
     private RestaurantEntity restaurant;
 
     @OneToOne
-    @JoinColumn(name = "reservation_id")
+    @JoinColumn(name = "table_id")
     private ReservationEntity reservation;
 
 }

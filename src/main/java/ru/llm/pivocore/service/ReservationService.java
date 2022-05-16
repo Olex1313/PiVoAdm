@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.llm.pivocore.configuration.security.facade.IAuthenticationFacade;
+import ru.llm.pivocore.configuration.security.suppliers.UserContextSupplier;
 import ru.llm.pivocore.exception.RestaurantException;
 import ru.llm.pivocore.mapper.ReservationMapper;
 import ru.llm.pivocore.model.dto.ReservationResponseDto;
@@ -41,18 +42,16 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class ReservationService {
 
-    private final IAuthenticationFacade authenticationFacade;
+    private final UserContextSupplier userContextSupplier;
     private final ReservationMapper reservationMapper;
     private final ReservationsRepository reservationsRepository;
     private final RestaurantRepository restaurantRepository;
-    private final RestaurantUsersRepository restaurantUsersRepository;
-    private final AppUserRepository appUserRepository;
 
 
     @Transactional
     public List<ReservationDto> getAllReservations(Long restaurantId) {
         List<ReservationDto> dtoToReturn = new ArrayList<>();
-        val restaurantUserEntity = getCurrentRestUserFromSecContext();
+        val restaurantUserEntity = userContextSupplier.getRestaurantUserEntityFromSecContext();
         Optional<RestaurantEntity> restaurant = restaurantUserEntity.getRestaurantList()
                 .stream().filter(rest -> rest.getId().equals(restaurantId))
                 .findFirst();
@@ -83,7 +82,7 @@ public class ReservationService {
 
 
     public ReservationResponseDto approveById(Long reservationId) {
-        RestaurantUserEntity restaurantUserEntity = getCurrentRestUserFromSecContext();
+        RestaurantUserEntity restaurantUserEntity = userContextSupplier.getRestaurantUserEntityFromSecContext();
         ReservationEntity reservationEntity = reservationsRepository.getById(reservationId);
         // check tables
         reservationEntity.setRestaurantUser(restaurantUserEntity);
@@ -103,7 +102,7 @@ public class ReservationService {
                 .startReservationTime(reservationRequest.getStartReservationTime())
                 .endReservationTime(reservationRequest.getEndReservationTime())
                 .build();
-        val appUserEntity = getCurrentAppUserFromSecContext();
+        val appUserEntity = userContextSupplier.getAppUserEntityFromSecContext();
         val reservationEntity = reservationMapper.dtoToEntity(reservationDto);
         reservationEntity.setUser(appUserEntity);
         Optional<RestaurantEntity> restaurant = restaurantRepository.findById(reservationRequest.getRestaurantId());
@@ -112,7 +111,8 @@ public class ReservationService {
         }
         RestaurantEntity restaurantEntity = restaurant.get();
         reservationEntity.setRestaurant(restaurantEntity);
-        linkReservationToRestaurant(reservationEntity, restaurantEntity);
+
+//        linkReservationToRestaurant(reservationEntity, restaurantEntity);
         return reservationMapper.entityToDto(reservationsRepository.save(reservationEntity));
     }
 
@@ -123,13 +123,4 @@ public class ReservationService {
         restaurant.getReservations().add(reservation);
     }
 
-    private AppUserEntity getCurrentAppUserFromSecContext() {
-        Authentication authentication = authenticationFacade.getAuthentication();
-        return appUserRepository.findByUsername(authentication.getName());
-   }
-
-    private RestaurantUserEntity getCurrentRestUserFromSecContext() {
-        Authentication authentication = authenticationFacade.getAuthentication();
-        return restaurantUsersRepository.findByUsername(authentication.getName());
-    }
 }

@@ -53,7 +53,7 @@ public class ReservationEntity {
     private RestaurantUserEntity restaurantUser;
 
     @OneToOne
-    @JoinColumn(name = "reservation_id")
+    @JoinColumn(name = "table_id")
     private RestaurantTableEntity restaurantTable;
 
 

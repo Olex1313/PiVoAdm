@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.llm.pivocore.configuration.security.suppliers.UserContextSupplier;
 import ru.llm.pivocore.enums.UserRoles;
 import ru.llm.pivocore.exception.AppUserServiceException;
 import ru.llm.pivocore.exception.RestaurantUserServiceException;
@@ -38,6 +39,7 @@ public class AppUserService implements UserDetailsService {
     private final AppUserMapper appUserMapper;
 
     private final PasswordEncoder passwordEncoder;
+
 
     @Transactional
     public List<AppUserDto> getAll() {
@@ -87,18 +89,6 @@ public class AppUserService implements UserDetailsService {
                 .build();
         var entity = appUserMapper.dtoToEntity(appUserDto);
         return appUserMapper.entityToDto(save(entity));
-    }
-
-    @Transactional
-    public AppUserEntity getCurrentUserFromSecContext() {
-        val currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-        try {
-            return appUserRepository.findByUsername(currentUsername);
-        } catch (Exception e) {
-            throw new AppUserServiceException(
-                    "Couldn't retrieve app user for current user:%s in session".formatted(currentUsername)
-            );
-        }
     }
 
 }

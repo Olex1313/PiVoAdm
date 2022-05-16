@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.llm.pivocore.configuration.security.suppliers.UserContextSupplier;
 import ru.llm.pivocore.exception.RestaurantCreateException;
 import ru.llm.pivocore.exception.RestaurantException;
 import ru.llm.pivocore.exception.RestaurantNotFoundException;
@@ -33,15 +34,13 @@ import java.util.stream.Collectors;
 public class RestaurantService {
 
     private final RestaurantRepository repository;
-
-    private final RestaurantUserService userService;
-
+    private final UserContextSupplier userContextSupplier;
     private final RestaurantMapper mapper;
 
     @Transactional
     public RestaurantDto createRestaurant(CreateRestaurantRequest request) {
         try {
-            val restaurantUser = userService.getCurrentUserFromSecContext();
+            val restaurantUser = userContextSupplier.getRestaurantUserEntityFromSecContext();
             val rawDto = RestaurantDto.builder()
                     .email(request.getEmail())
                     .location(request.getLocation())
@@ -62,7 +61,7 @@ public class RestaurantService {
     @Transactional
     public List<RestaurantDto> listRestaurants() {
         try {
-            val restaurantUser = userService.getCurrentUserFromSecContext();
+            val restaurantUser = userContextSupplier.getRestaurantUserEntityFromSecContext();
             val restaurants = restaurantUser.getRestaurantList();
             return restaurants.stream().map(mapper::entityToDto).collect(Collectors.toList());
         } catch (Exception e) {
@@ -72,7 +71,7 @@ public class RestaurantService {
 
     @Transactional
     public RestaurantDto updateRestaurant(UpdateRestaurantRequest request) {
-        val user = userService.getCurrentUserFromSecContext();
+        val user = userContextSupplier.getRestaurantUserEntityFromSecContext();
         val restaurants = user.getRestaurantList();
         val restaurantToUpdate = restaurants.stream()
                 .filter(restaurant -> restaurant.getId().equals(request.getRestaurantId())).findFirst();

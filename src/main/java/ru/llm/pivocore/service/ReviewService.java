@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.stereotype.Service;
+import ru.llm.pivocore.configuration.security.suppliers.UserContextSupplier;
 import ru.llm.pivocore.exception.ReviewException;
 import ru.llm.pivocore.mapper.ReviewMapper;
 import ru.llm.pivocore.model.dto.ReviewDto;
@@ -23,11 +24,9 @@ public class ReviewService {
 
     private final ReviewRepository repository;
 
-    private final AppUserService appUserService;
+    private final UserContextSupplier userContextSupplier;
 
     private final RestaurantService restaurantService;
-
-    private final RestaurantUserService restaurantUserService;
 
     private final ReviewMapper mapper;
 
@@ -35,7 +34,7 @@ public class ReviewService {
     public List<ReviewDto> gatherReviewsForUser(Long userId) {
         if (userId == null) {
             log.info("Missing userId in path, gathering for current user");
-            val currentUser = appUserService.getCurrentUserFromSecContext();
+            val currentUser = userContextSupplier.getAppUserEntityFromSecContext();
             userId = currentUser.getId();
         }
         return retrieveReviewsForAppUserId(userId);
@@ -45,7 +44,7 @@ public class ReviewService {
     public List<ReviewDto> gatherReviewsForRestaurant(Long restaurantId) {
         if (restaurantId == null) {
             log.info("Missing userId in path, gathering for current user restaurants");
-            val currentUser = restaurantUserService.getCurrentUserFromSecContext();
+            val currentUser = userContextSupplier.getRestaurantUserEntityFromSecContext();
             val restaurantsIdForCurrentUser = currentUser.getRestaurantList().stream()
                     .map(RestaurantEntity::getId)
                     .collect(Collectors.toSet());
@@ -64,7 +63,7 @@ public class ReviewService {
         try {
             entity.setComment(request.getComment());
             entity.setScore(request.getScore());
-            entity.setAppUser(appUserService.getCurrentUserFromSecContext());
+            entity.setAppUser(userContextSupplier.getAppUserEntityFromSecContext());
             entity.setRestaurant(restaurantService.getById(request.getRestaurantId()));
             return mapper.entityToDto(repository.save(entity));
         } catch (Exception e) {
