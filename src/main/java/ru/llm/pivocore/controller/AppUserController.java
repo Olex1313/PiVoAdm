@@ -44,12 +44,8 @@ public class AppUserController {
     ) {
         return appUserService.registerUser(registerRequest);
     }
-    @PostMapping(value = "/reserve")
-    public @ResponseBody ReservationDto reserve(@RequestBody ReservationRequest reservationRequest) {
-        return reservationService.createReservation(reservationRequest);
-    }
 
-    @GetMapping(value = { "/reviews/{userId}", "/reviews" })
+    @GetMapping(value = { "{userId}/reviews/", "/reviews" })
     public @ResponseBody List<ReviewDto> gatherReviews(@PathVariable(required = false) Long userId) {
         return reviewService.gatherReviewsForUser(userId);
     }

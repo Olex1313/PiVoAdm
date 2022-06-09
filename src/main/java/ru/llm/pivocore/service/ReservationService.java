@@ -2,37 +2,26 @@ package ru.llm.pivocore.service;
 
 import lombok.AllArgsConstructor;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.llm.pivocore.configuration.security.facade.IAuthenticationFacade;
 import ru.llm.pivocore.configuration.security.suppliers.UserContextSupplier;
 import ru.llm.pivocore.exception.*;
 import ru.llm.pivocore.mapper.ReservationMapper;
-import ru.llm.pivocore.model.dto.ReservationResponseDto;
-import ru.llm.pivocore.model.entity.*;
-import ru.llm.pivocore.model.request.ReservationRequest;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
-import ru.llm.pivocore.configuration.security.facade.IAuthenticationFacade;
-import ru.llm.pivocore.mapper.AppUserMapper;
-import ru.llm.pivocore.mapper.ReservationMapper;
-import ru.llm.pivocore.model.ReservationRequest;
-import ru.llm.pivocore.model.dto.AppUserDto;
 import ru.llm.pivocore.model.dto.ReservationDto;
-import ru.llm.pivocore.repository.*;
+import ru.llm.pivocore.model.dto.ReservationResponseDto;
+import ru.llm.pivocore.model.entity.ReservationEntity;
+import ru.llm.pivocore.model.entity.RestaurantEntity;
+import ru.llm.pivocore.model.entity.RestaurantTableEntity;
+import ru.llm.pivocore.model.request.ReservationRequest;
+import ru.llm.pivocore.repository.ReservationsRepository;
+import ru.llm.pivocore.repository.RestaurantRepository;
+import ru.llm.pivocore.repository.TableRepository;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
-
-import java.time.LocalDate;
 
 @Service
 @AllArgsConstructor
@@ -58,9 +47,7 @@ public class ReservationService {
         List<ReservationEntity> currReservationsAssignedToRestaurant = restaurant.get().getReservations();
         if (currReservationsAssignedToRestaurant != null) {
             currReservationsAssignedToRestaurant.
-                forEach(
-                        reservationEntity -> {reservationEntity.setRestaurantUser(restaurantUserEntity);
-                        });
+                    forEach(reservationEntity -> reservationEntity.setRestaurantUser(restaurantUserEntity));
             List<ReservationEntity> currReservationsUserHas = restaurantUserEntity.getReservations();
             if (currReservationsUserHas == null) {
                 currReservationsUserHas = new ArrayList<>();
@@ -81,7 +68,7 @@ public class ReservationService {
         val restaurantEntity = restaurantRepository.getById(restaurantId);
         val reservationEntity = reservationsRepository.getById(reservationId);
         Optional<RestaurantTableEntity> suitableTable;
-        try{
+        try {
             suitableTable = findSuitableTable(restaurantEntity, reservationEntity);
         } catch (RuntimeException e) {
             throw new ApproveReservationException(e.getMessage());
@@ -141,8 +128,8 @@ public class ReservationService {
         if (finalRestaurantTables == null) {
             throw new TableNotFoundException("Restaurant does not have any tables");
         }
-        return finalRestaurantTables.stream().filter(table -> reservation.getAmountOfGuests() <= table.getMaxAmount()
-                && !table.getIsActive())
+        return finalRestaurantTables.stream()
+                .filter(table -> reservation.getAmountOfGuests() <= table.getMaxAmount() && !table.getIsActive())
                 .findFirst();
     }
 

@@ -7,8 +7,11 @@ import lombok.Builder;
 @AllArgsConstructor
 @Builder
 public class ReservationResponseDto {
+
     @JsonProperty("reservation_id")
     private Long reservationId;
+
     @JsonProperty("is_approved")
     private Boolean isApproved;
+
 }

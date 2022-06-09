@@ -56,6 +56,14 @@ public class RestaurantEntity {
     @JoinColumn(name = "restaurant_id")
     private List<RestaurantTableEntity> restaurantTables;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "restaurants_cuisines",
+            joinColumns = { @JoinColumn(name = "restaurant_id") },
+            inverseJoinColumns = { @JoinColumn(name = "cuisine_id") }
+    )
+    private List<CuisineEntity> cuisines;
+
     @Override
     public String toString() {
         return "RestaurantEntity{" +

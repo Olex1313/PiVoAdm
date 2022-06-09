@@ -22,7 +22,6 @@ public class RestaurantUserController {
 
     private final RestaurantUserService restaurantUserService;
 
-
     @GetMapping(value = "/")
     public @ResponseBody List<RestaurantUserDto> getAllRestaurantUsers() {
         return restaurantUserService.getAll();

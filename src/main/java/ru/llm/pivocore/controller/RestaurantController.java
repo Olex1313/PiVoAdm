@@ -40,7 +40,7 @@ public class RestaurantController {
         return restaurantService.updateRestaurant(request);
     }
 
-    @GetMapping(value = { "/reviews/{restaurantId}", "/reviews" })
+    @GetMapping(value = { "/{restaurantId}/reviews", "/reviews" })
     private @ResponseBody List<ReviewDto> gatherReviews(
             @PathVariable(required = false) Long restaurantId
     ) {

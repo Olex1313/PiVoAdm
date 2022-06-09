@@ -22,10 +22,10 @@ public class ReservationController {
     }
 
     @PostMapping(value = "/approve")
-    public @ResponseBody ReservationResponseDto
-        submitReservation(@RequestParam Map<String, String> params) {
-        return reservationService
-                .approveReservationAssignedToRestaurant(Long.parseLong(params.get("restaurantId"))
-                        ,Long.parseLong(params.get("reservationId")));
+    public @ResponseBody ReservationResponseDto submitReservation(@RequestParam Map<String, String> params) {
+        return reservationService.approveReservationAssignedToRestaurant(
+                Long.parseLong(params.get("restaurantId")), Long.parseLong(params.get("reservationId"))
+        );
     }
+
 }
