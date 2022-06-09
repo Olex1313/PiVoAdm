@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="delete-cuisine_id_column" author="aleksejlimonov1" dbms="postgresql" created="09.06.2022">
+        <dropColumn tableName="restaurants" columnName="cuisine_id"/>
+    </changeSet>
+
+    <changeSet id="create-restaurant-to-cuisine-table" author="aleksejlimonov1" dbms="postgresql" created="09.06.2022">
+        <createTable tableName="restaurants_cuisines">
+            <column name="restaurant_id" type="serial">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cuisine_id" type="serial">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="restaurants_cuisines" baseColumnNames="cuisine_id" constraintName="cuisine_fk"
+                                 referencedTableName="cuisines"
+                                 referencedColumnNames="cuisine_id"/>
+        <addForeignKeyConstraint baseTableName="restaurants_cuisines" baseColumnNames="restaurant_id" constraintName="restaurants_fk"
+                                 referencedTableName="restaurants"
+                                 referencedColumnNames="restaurant_id"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+
+    <changeSet id="create-cuisines-seq" author="aleksejlimonov" dbms="postgresql" created="26.05.2022">
+        <createSequence sequenceName="cuisine_seq" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="create-cuisines-table" author="aleksejlimonov" dbms="postgresql" created="26.05.2022">
+        <createTable tableName="cuisines">
+            <column name="cuisine_id" type="serial">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="cuisines_pk"/>
+            </column>
+            <column name="name" type="text"/>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="add-reference-to-cuisines" author="aleksejlimonov" dbms="postgresql" created="26.05.2022">
+        <addColumn tableName="restaurants">
+            <column name="cuisine_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-fk-to-restaurants" author="aleksejlimonov">
+        <addForeignKeyConstraint baseTableName="restaurants" baseColumnNames="cuisine_id" referencedTableName="cuisines"
+                                 referencedColumnNames="cuisine_id" constraintName="restaurants_on_cuisine"/>
+    </changeSet>
+
+</databaseChangeLog>

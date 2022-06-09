@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 
 @Getter
 @Setter
@@ -24,4 +26,6 @@ public class RestaurantDto {
     private String email;
     @JsonProperty("is_active")
     private Boolean isActive;
+    @JsonProperty("cuisines")
+    private List<CuisineDto> cuisines;
 }

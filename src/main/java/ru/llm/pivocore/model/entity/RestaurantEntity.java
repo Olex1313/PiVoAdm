@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -49,6 +48,22 @@ public class RestaurantEntity {
     )
     private List<RestaurantUserEntity> restaurantUsers;
 
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "restaurant_id")
+    private List<ReservationEntity> reservations;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "restaurant_id")
+    private List<RestaurantTableEntity> restaurantTables;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "restaurants_cuisines",
+            joinColumns = { @JoinColumn(name = "restaurant_id") },
+            inverseJoinColumns = { @JoinColumn(name = "cuisine_id") }
+    )
+    private List<CuisineEntity> cuisines;
+
     @Override
     public String toString() {
         return "RestaurantEntity{" +
@@ -67,7 +82,9 @@ public class RestaurantEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RestaurantEntity that = (RestaurantEntity) o;
-        return id.equals(that.id) && name.equals(that.name) && location.equals(that.location) && website.equals(that.website) && phoneNumber.equals(that.phoneNumber) && email.equals(that.email) && isActive.equals(that.isActive);
+        return id.equals(that.id) && name.equals(that.name) && location.equals(that.location)
+                && website.equals(that.website) && phoneNumber.equals(that.phoneNumber)
+                && email.equals(that.email) && isActive.equals(that.isActive);
     }
 
     @Override

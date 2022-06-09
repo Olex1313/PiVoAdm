@@ -34,7 +34,12 @@ class PiVoCoreSecurityConfig extends WebSecurityConfigurerAdapter {
         authenticationFilter.setRequiresAuthenticationRequestMatcher(request -> request.getServletPath().endsWith("login"));
         http = http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
-        http.authorizeRequests().antMatchers("/api/restaurant_user/**", "/api/restaurant/**").hasAuthority(RESTAURANT_USER.name());
+        http.authorizeRequests().antMatchers(
+                "/api/restaurant_user/**",
+                "/api/reservation/**",
+                "/api/restaurant/**",
+                "/api/cuisine/**"
+        ).hasAuthority(RESTAURANT_USER.name());
         http.authorizeRequests().antMatchers("/api/app_user/**").hasAuthority(APP_USER.name());
         http.authorizeRequests().antMatchers("/api/reviews").hasAnyAuthority(APP_USER.name());
         http.addFilter(authenticationFilter);
@@ -43,7 +48,7 @@ class PiVoCoreSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring().antMatchers("/api/restaurant_user/register", "/api/app_user/register");
+        web.ignoring().antMatchers("/api/restaurant_user/register", "/api/app_user/register", "v3/api-docs");
     }
 
 }

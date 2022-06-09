@@ -84,7 +84,7 @@ CREATE TABLE RestaurantUsers (
     ),
 
     CONSTRAINT restaurant_users_unique_email UNIQUE (email),
-    CONSTRAINT restaurant_users_unique_phone_number UNIQUE (phone_number)
+    CONSTRAINT restaurant_users_unique_phone_number UNIQUE (phone_number),
     CONSTRAINT restaurant_users_unique_username UNIQUE (username)
 );
 
@@ -145,3 +145,20 @@ CREATE TABLE Review(
 
     CONSTRAINT reviews_score_check CHECK (score BETWEEN 1 AND 10)
 );
+
+CREATE TABLE Cuisines(
+    cuisine_id SERIAL,
+    name TEXT NOT NULL,
+
+    CONSTRAINT cuisines_pk PRIMARY KEY (cuisine_id),
+    CONSTRAINT cuisines_name_unique UNIQUE (name),
+    CONSTRAINT name_not_empty_check CHECK (name != '')
+);
+
+CREATE TABLE RestaurantsToCuisines(
+    cuisine_id INTEGER,
+    restaurant_id INTEGER,
+
+    CONSTRAINT restaurants_to_cuisines_restaurant_fk FOREIGN KEY (restaurant_id) REFERENCES Restaurants(restaurant_id),
+    CONSTRAINT restaurants_to_cuisines_cuisine_fk FOREIGN KEY (cuisine_id) REFERENCES Cuisines(cuisine_id)
+)

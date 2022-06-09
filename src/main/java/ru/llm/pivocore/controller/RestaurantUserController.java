@@ -4,8 +4,13 @@ package ru.llm.pivocore.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
+import ru.llm.pivocore.model.dto.ReservationDto;
+import ru.llm.pivocore.model.dto.ReservationResponseDto;
+import ru.llm.pivocore.model.request.ReservationRequest;
 import ru.llm.pivocore.model.request.RestaurantUserRegisterRequest;
 import ru.llm.pivocore.model.dto.RestaurantUserDto;
+import ru.llm.pivocore.service.ReservationService;
+import ru.llm.pivocore.service.RestaurantService;
 import ru.llm.pivocore.service.RestaurantUserService;
 
 import java.util.List;

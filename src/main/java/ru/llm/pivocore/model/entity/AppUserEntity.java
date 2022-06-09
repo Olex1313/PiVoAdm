@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -43,6 +44,10 @@ public class AppUserEntity {
 
     @Column(name = "date_of_registration")
     private String dateOfRegistration;
+
+    @OneToMany
+    @JoinColumn(name = "reservation_id")
+    private Set<ReservationEntity> reservations;
 
     @Override
     public String toString() {

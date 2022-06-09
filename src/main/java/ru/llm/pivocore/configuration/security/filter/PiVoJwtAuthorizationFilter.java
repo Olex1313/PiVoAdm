@@ -51,6 +51,10 @@ public class PiVoJwtAuthorizationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+        if (request.getServletPath().endsWith("/swagger-ui.html")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         var authorizationHeader = request.getHeader(AUTHORIZATION);
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             logger.info("Checking token");

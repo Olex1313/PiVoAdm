@@ -9,6 +9,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -54,6 +55,10 @@ public class RestaurantUserEntity {
             inverseJoinColumns = { @JoinColumn(name = "restaurant_id") }
     )
     private List<RestaurantEntity> restaurantList;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name="approved_by")
+    private List<ReservationEntity> reservations;
 
     @Override
     public String toString() {

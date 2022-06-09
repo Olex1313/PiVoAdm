@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
       https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
 
-    <changeSet id="create_restaurant_user_id_seq" author="vladislavmoiseenkov" dbms="postgresql" created="11.05.2022">
+    <changeSet id="create_restaurant_user_id_seq" author="vladislavmoiseenkov1" dbms="postgresql" created="11.05.2022">
         <createSequence incrementBy="25" sequenceName="restaurant_user_id_generator" startValue="1"/>
     </changeSet>
 

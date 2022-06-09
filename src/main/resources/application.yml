@@ -1,16 +1,21 @@
 spring:
+  swagger-ui:
+    path: /v3/api-docs
   datasource:
       driver-class-name: org.postgresql.Driver
-      username: PiVoCore
-      password: password
-      url: jdbc:postgresql://localhost:5432/PiVoCoreDb
+      username: postgres
+      password: postgres
+      url: jdbc:postgresql://localhost:5432/db
   liquibase:
     change-log: classpath:liquibase/database-changelog.xml
   banner:
     location: classpath:banner.txt
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
 server:
-  port: 8081
+  port: 8080
 
 jwt:
   secret: super-secret

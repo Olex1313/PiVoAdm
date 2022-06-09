@@ -40,17 +40,6 @@ public class RestaurantUserService implements UserDetailsService {
         return restaurantUsersRepository.save(restaurantUserEntity);
     }
 
-    @Transactional
-    public RestaurantUserEntity getCurrentUserFromSecContext() {
-        val currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-        try {
-            return restaurantUsersRepository.findByUsername(currentUsername);
-        } catch (Exception e) {
-            throw new RestaurantUserServiceException(
-                    "Couldn't retrieve restaurant user for current user:%s in session".formatted(currentUsername)
-            );
-        }
-    }
 
     public List<RestaurantUserDto> getAll() {
         try {
